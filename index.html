@@ -77,28 +77,26 @@
         .building-viewport {
             position: relative; height: 280px; margin: 10px 0 20px; border-radius: var(--radius-medium);
             background: linear-gradient(180deg, #1E2940 0%, #10161F 100%); overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex; flex-direction: column; justify-content: flex-end;
         }
         
-        .building-ground { 
-            position: absolute; bottom: 0; left: 0; right: 0; height: 50px; 
-            background: #10161F; border-top: 2px solid var(--color-bg-element); z-index: 2; 
-            display: flex; align-items: flex-end; justify-content: center; gap: 4px; padding-bottom: 5px;
-            overflow: hidden;
+        /* Небо и звезды */
+        .sky-bg {
+            position: absolute; inset: 0;
+            background-image: 
+                radial-gradient(1.5px 1.5px at 20% 20%, rgba(255, 255, 255, 0.5), transparent),
+                radial-gradient(1.5px 1.5px at 70% 15%, rgba(255, 255, 255, 0.4), transparent),
+                radial-gradient(1px 1px at 45% 30%, rgba(255, 255, 255, 0.4), transparent);
         }
 
-        .workers-container {
-            position: absolute; bottom: 0; left: 0; right: 0; display: flex;
-            justify-content: center; align-items: flex-end; gap: 2px; z-index: 3; padding: 0 10px;
-        }
-
-        .worker-icon { width: 20px; height: 20px; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-
-        .camera-container {
-            position: absolute; bottom: 50px; left: 0; right: 0; display: flex;
-            flex-direction: column-reverse; align-items: center;
+        /* Контейнер для дома (растет вверх) */
+        .building-wrapper {
+            position: absolute; bottom: 50px; left: 0; right: 0;
+            display: flex; flex-direction: column; align-items: center;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 2;
         }
+
         .floor-block {
             width: 110px; height: 15px; background: linear-gradient(180deg, var(--color-primary), var(--color-primary-dark));
             border-top: 2px solid rgba(255, 255, 255, 0.4); border-bottom: 1px solid rgba(0, 0, 0, 0.5); position: relative;
@@ -108,9 +106,29 @@
             box-shadow: 20px 0 0 var(--color-accent-yellow), 40px 0 0 var(--color-accent-yellow), 60px 0 0 var(--color-accent-yellow); opacity: 0.7;
         }
         
+        /* Земля */
+        .ground {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 50px; 
+            background: #10161F; border-top: 2px solid #2A364F; z-index: 10;
+            display: flex; align-items: flex-end; justify-content: center;
+        }
+
+        /* Рабочие на земле */
+        .workers-overlay {
+            position: absolute; inset: 0; display: flex; justify-content: space-between; align-items: flex-end; padding: 0 10px 5px; pointer-events: none;
+        }
+
+        .worker-svg {
+            position: absolute; bottom: 0;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        
+        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+        /* Этаж */
         .floor-indicator {
             position: absolute; top: 16px; left: 16px; background: rgba(0, 0, 0, 0.6); padding: 8px 16px;
-            border-radius: 30px; font-weight: 800; font-size: 14px; z-index: 4; display: flex; align-items: center; gap: 8px;
+            border-radius: 30px; font-weight: 800; font-size: 14px; z-index: 20; display: flex; align-items: center; gap: 8px;
         }
 
         /* КЛИК-ЗОНА */
@@ -190,7 +208,6 @@
         .confetti-particle { position: fixed; width: 10px; height: 10px; pointer-events: none; z-index: 10002; animation: confettiFall linear forwards; }
         @keyframes confettiFall { 0% { transform: translateY(0) rotate(0); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
         
-        /* СТИЛИ ДЛЯ ОКНА ПРОВЕРКИ */
         .inspect-btn { margin-bottom: 10px; display: block; width: 100%; padding: 12px; border-radius: var(--radius-small); font-weight: 800; font-size: 14px; border: none; cursor: pointer; text-align: left; padding-left: 20px;}
         .inspect-btn:active { opacity: 0.8; }
     </style>
@@ -233,15 +250,21 @@
             <!-- СТРОЙКА -->
             <div class="screen active" id="screen-build">
                 <div class="building-viewport">
+                    <div class="sky-bg"></div>
+                    
                     <div class="floor-indicator">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 13a8 8 0 0 1 16 0v1H4v-1Z" stroke="var(--color-accent-yellow)" stroke-width="2"/><path d="M3 17h18" stroke="var(--color-accent-yellow)" stroke-width="2" stroke-linecap="round"/></svg>
                         Этаж <span id="val-floor">1</span>
                     </div>
-                    
-                    <div class="camera-container" id="camera"><div id="building-render"></div></div>
-                    
-                    <div class="building-ground">
-                        <div class="workers-container" id="workers-render"></div>
+
+                    <!-- Здание -->
+                    <div class="building-wrapper" id="building-wrapper">
+                        <div id="building-render"></div>
+                    </div>
+
+                    <!-- Земля с рабочими -->
+                    <div class="ground">
+                        <div class="workers-overlay" id="workers-render"></div>
                     </div>
                 </div>
 
@@ -387,7 +410,6 @@
             </div>
             <h3 class="modal-title">Проверка Бригадира!</h3>
             <p class="modal-text" id="inspector-desc">Бригадир пришел проверить объект. Как ответишь?</p>
-            
             <div id="inspector-choices"></div>
         </div>
     </div>
@@ -404,7 +426,7 @@
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО ОБЩЕГО НАЗНАЧЕНИЯ (Для промокодов и этажей) -->
+    <!-- МОДАЛЬНОЕ ОКНО ОБЩЕГО НАЗНАЧЕНИЯ -->
     <div class="modal-overlay" id="modal-window">
         <div class="modal-content">
             <div class="modal-icon-wrapper" id="modal-icon">
@@ -418,11 +440,11 @@
 
     <script>
         const MAX_CLICKS_PER_SEC = 25;
-        let ENERGY_MAX = 1000; // Теперь это переменная, ее можно качать
+        let ENERGY_MAX = 1000; 
         const ENERGY_REGEN_RATE = 1;
         const BRICKS_PER_FLOOR = 500;
         const MAX_OFFLINE_TIME = 28800; // 8 часов
-        const SAVE_KEY = 'my_brigada_save_data_v11';
+        const SAVE_KEY = 'my_brigada_save_data_v12';
 
         const GAME_UNITS = {
             mason: { name: 'Каменщик', baseCost: 100, income: 1, desc: '+1 кирпич/сек' },
@@ -466,9 +488,7 @@
                 const user = tg.initDataUnsafe?.user;
                 if (user) { state.telegramId = user.id; state.firstName = user.first_name || 'Строитель'; }
             }
-            
             loadGameData(); 
-            
             if (state.isSubscribed) showMainGame();
         }
 
@@ -478,12 +498,10 @@
                 if (saved) {
                     const parsed = JSON.parse(saved);
                     const lastSaved = parsed.lastSavedTime || Date.now();
-                    
                     state = { ...state, ...parsed };
                     if (!state.settings) state.settings = { sound: true, volume: 0.5, vibration: true };
                     
                     ENERGY_MAX = 1000 + (state.energyLvl * 1000);
-                    
                     const now = Date.now();
                     const secondsPassed = Math.floor((now - lastSaved) / 1000);
                     
@@ -493,16 +511,10 @@
                         for (const [unitId, count] of Object.entries(state.units)) {
                             if (GAME_UNITS[unitId]) offlineIncome += GAME_UNITS[unitId].income * count;
                         }
-                        
                         const totalEarned = offlineIncome * effectiveSeconds;
-                        
                         if (totalEarned > 0) {
                             state.bricks += totalEarned;
                             state.totalBricksEarned += totalEarned;
-                            
-                            const targetFloor = Math.floor(state.totalBricksEarned / BRICKS_PER_FLOOR) + 1;
-                            if (targetFloor > state.floor) state.floor = targetFloor;
-                            
                             setTimeout(() => {
                                 document.getElementById('offline-desc').innerHTML = `Пока тебя не было <b>(${formatTime(effectiveSeconds)})</b>, твоя бригада добыла:<br><br><span style="font-size:32px; color:var(--color-accent-green); font-weight:900;">+${formatNumber(totalEarned)} 🧱</span>`;
                                 document.getElementById('offline-window').classList.add('show');
@@ -514,7 +526,6 @@
                     if (energySecondsPassed > 0) {
                         state.energy = Math.min(ENERGY_MAX, state.energy + (energySecondsPassed * ENERGY_REGEN_RATE));
                     }
-                    
                     state.lastEnergyUpdate = now;
                     state.lastSavedTime = now;
                     state.bargerPrice = Math.floor(Math.random() * 4) + 1; 
@@ -647,6 +658,7 @@
             saveGameData();
         }
 
+        // ИЗМЕНЕННАЯ ЛОГИКА ПРОДАЖИ: Этажи сносятся, если кирпичей становится меньше нужного
         function sellBricks(amountType) {
             if (state.bricks <= 0) { showToast('Нет кирпичей для продажи!', 'error'); return; }
             let amountToSell = amountType === 'all' ? state.bricks : Math.min(state.bricks, amountType);
@@ -657,8 +669,16 @@
             state.money += earnedMoney;
             state.bargerPrice = Math.floor(Math.random() * 4) + 1;
 
+            // Пересчитываем этаж исходя из ОСТАВШИХСЯ кирпичей
+            const newFloor = Math.floor(state.bricks / BRICKS_PER_FLOOR) + 1;
+            if (newFloor < state.floor) {
+                state.floor = newFloor;
+                showToast('Кирпичи проданы! Этажи снесены.', 'error');
+            } else {
+                showToast(`Продано ${formatNumber(amountToSell)} шт. за ${formatNumber(earnedMoney)} ₽`, 'success');
+            }
+
             playSoundEffect(800, 0.1);
-            showToast(`Продано ${formatNumber(amountToSell)} шт. за ${formatNumber(earnedMoney)} ₽`, 'success');
             renderAllUI(); saveGameData();
         }
 
@@ -694,13 +714,11 @@
         function buyEnergyUpgrade() {
             const currentLvl = state.energyLvl || 0;
             const cost = 800 + (currentLvl * 1500); 
-            
             if (state.money < cost) { showToast('Не хватает рублей!', 'error'); return; }
             
             state.money -= cost;
             state.energyLvl += 1;
             ENERGY_MAX = 1000 + (state.energyLvl * 1000);
-            
             state.energy = ENERGY_MAX; 
             
             playSoundEffect(1000, 0.2); 
@@ -774,14 +792,15 @@
             document.getElementById('energy-fill').style.width = Math.max(0, Math.min(100, (state.energy / ENERGY_MAX) * 100)) + '%';
             document.getElementById('val-barger-price').textContent = state.bargerPrice + ' ₽';
             document.getElementById('val-passive').textContent = formatNumber(calculatePassiveIncome());
-            const currentProgress = state.totalBricksEarned % BRICKS_PER_FLOOR;
+            
+            const currentProgress = state.bricks % BRICKS_PER_FLOOR;
             document.getElementById('floor-fill').style.width = (currentProgress / BRICKS_PER_FLOOR) * 100 + '%';
             document.getElementById('val-floor-progress').textContent = `${formatNumber(currentProgress)} / ${BRICKS_PER_FLOOR} до этажа`;
         }
 
         function renderBuilding() {
             const container = document.getElementById('building-render');
-            const camera = document.getElementById('camera');
+            const camera = document.getElementById('building-wrapper');
             const floorsToShow = Math.min(50, state.floor);
             if (container.children.length !== floorsToShow) {
                 container.innerHTML = '';
@@ -796,33 +815,71 @@
             camera.style.transform = `translateY(${floorsAboveBase * 15}px)`;
         }
 
+        // --- ОБНОВЛЕННАЯ ОТРИСОВКА РАБОЧИХ НА ЗЕМЛЕ ---
         function renderWorkers() {
             const container = document.getElementById('workers-render');
             container.innerHTML = '';
-            const maxVisually = 20; 
-            let workersToShow = [];
+            
+            // Ограничиваем для визуала
+            const maxMasons = 5;
+            const maxMixers = 3;
+            const maxCranes = 2;
+            const maxForemen = 2;
 
-            for (const [unitId, count] of Object.entries(state.units)) {
-                if (unitId === 'mason') {
-                    for (let i = 0; i < Math.min(count, maxVisually); i++) {
-                        workersToShow.push(`<svg class="worker-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="6" r="3" fill="#FFD60A"/><path d="M7 21v-4a5 5 0 0 1 10 0v4" stroke="#FF6B1A" stroke-width="3" stroke-linecap="round"/></svg>`);
-                    }
-                } else if (unitId === 'mixer') {
-                    for (let i = 0; i < Math.min(count, maxVisually); i++) {
-                        workersToShow.push(`<svg class="worker-icon" viewBox="0 0 24 24" fill="none"><circle cx="6" cy="18" r="2" fill="#8A94A6"/><circle cx="18" cy="18" r="2" fill="#8A94A6"/><path d="M3 14h10l6-6 3 3-4 3" stroke="#FF6B1A" stroke-width="2" fill="#232D42"/></svg>`);
-                    }
-                } else if (unitId === 'crane') {
-                    for (let i = 0; i < Math.min(count, maxVisually); i++) {
-                        workersToShow.push(`<svg class="worker-icon" viewBox="0 0 24 24" fill="none"><path d="M4 22V4h12" stroke="#FFD60A" stroke-width="2"/><path d="M4 4l8 4M16 4v6" stroke="#FFD60A" stroke-width="2"/><rect x="14" y="12" width="4" height="4" fill="#FF6B1A"/></svg>`);
-                    }
-                } else if (unitId === 'foreman') {
-                    for (let i = 0; i < Math.min(count, maxVisually); i++) {
-                        workersToShow.push(`<svg class="worker-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="6" r="3" fill="#FF6B1A"/><path d="M6 21v-3a6 6 0 0 1 12 0v3" stroke="#2ECC71" stroke-width="3" stroke-linecap="round"/></svg>`);
-                    }
-                }
+            let leftPos = 5; // Начальный отступ слева
+            let rightPos = 5; // Отступ справа
+
+            // 1. Рисуем Каменщиков (слева)
+            const masonCount = Math.min(state.units.mason || 0, maxMasons);
+            for (let i = 0; i < masonCount; i++) {
+                const svg = `
+                <svg class="worker-svg" style="left: ${leftPos}px; width: 25px; height: 25px;" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="6" r="3" fill="#FFD60A"/>
+                    <path d="M8 21v-6a4 4 0 0 1 8 0v6" stroke="#FF6B1A" stroke-width="3" stroke-linecap="round"/>
+                    <rect x="15" y="9" width="6" height="2" fill="#8A94A6" transform="rotate(30 15 9)"/>
+                </svg>`;
+                container.innerHTML += svg;
+                leftPos += 25;
             }
-            if (workersToShow.length > 30) workersToShow = workersToShow.sort(() => 0.5 - Math.random()).slice(0, 30);
-            container.innerHTML = workersToShow.join('');
+
+            // 2. Рисуем Бетономешалки (слева, подальше)
+            const mixerCount = Math.min(state.units.mixer || 0, maxMixers);
+            for (let i = 0; i < mixerCount; i++) {
+                const svg = `
+                <svg class="worker-svg" style="left: ${leftPos}px; width: 35px; height: 25px;" viewBox="0 0 24 24" fill="none">
+                    <circle cx="6" cy="20" r="3" fill="#2A364F"/>
+                    <circle cx="18" cy="20" r="3" fill="#2A364F"/>
+                    <path d="M2 16h12l5-6 4 4-3 3" stroke="#FF6B1A" stroke-width="3" fill="#FF6B1A" fill-opacity="0.3"/>
+                </svg>`;
+                container.innerHTML += svg;
+                leftPos += 35;
+            }
+
+            // 3. Рисуем Краны (справа)
+            const craneCount = Math.min(state.units.crane || 0, maxCranes);
+            for (let i = 0; i < craneCount; i++) {
+                const svg = `
+                <svg class="worker-svg" style="right: ${rightPos}px; width: 40px; height: 60px;" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 22V4h12" stroke="#FFD60A" stroke-width="2"/>
+                    <path d="M6 4l10 5M16 4v6" stroke="#FFD60A" stroke-width="2"/>
+                    <rect x="14" y="12" width="4" height="4" fill="#FF6B1A"/>
+                    <path d="M16 16v4" stroke="#8A94A6" stroke-width="1"/>
+                    <circle cx="16" cy="20" r="1" fill="#FFD60A"/>
+                </svg>`;
+                container.innerHTML += svg;
+                rightPos += 40;
+            }
+
+            // 4. Рисуем Бригадиров (по центру)
+            const foremanCount = Math.min(state.units.foreman || 0, maxForemen);
+            for (let i = 0; i < foremanCount; i++) {
+                const svg = `
+                <svg class="worker-svg" style="left: calc(50% - 15px + ${i * 30}px); width: 30px; height: 30px;" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="6" r="3" fill="#FF6B1A"/>
+                    <path d="M6 21v-4a6 6 0 0 1 12 0v4" stroke="#2ECC71" stroke-width="3" stroke-linecap="round"/>
+                </svg>`;
+                container.innerHTML += svg;
+            }
         }
 
         function renderUnitsList() {
@@ -955,7 +1012,8 @@
                 if (income > 0) {
                     state.bricks += income;
                     state.totalBricksEarned += income;
-                    checkFloorProgress();
+                    // При пассивном доходе этажи не растут бесконечно вверх, если кирпичей мало,
+                    // но мы добавляем кирпичи, значит прогресс-бар будет расти.
                     renderResourceBar(); renderBuilding();
                 }
             }, 1000);
