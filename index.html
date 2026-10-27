@@ -444,7 +444,7 @@
         const ENERGY_REGEN_RATE = 1;
         const BRICKS_PER_FLOOR = 500;
         const MAX_OFFLINE_TIME = 28800; // 8 часов
-        const SAVE_KEY = 'my_brigada_save_data_v12';
+        const SAVE_KEY = 'my_brigada_save_data_v13';
 
         const GAME_UNITS = {
             mason: { name: 'Каменщик', baseCost: 100, income: 1, desc: '+1 кирпич/сек' },
@@ -471,7 +471,7 @@
             telegramId: 0, firstName: 'Строитель',
             bricks: 0, money: 0, stars: 0,
             floor: 1, energy: 1000, energyLvl: 0,
-            totalBricksEarned: 0,
+            totalBricksEarned: 0, // Отвечает за рост этажей
             units: {}, upgrades: {}, autoClickerLvl: 0,
             bargerPrice: 2,
             lastEnergyUpdate: Date.now(), 
@@ -624,6 +624,7 @@
         }
 
         function checkFloorProgress() {
+            // Считаем этаж от общего количества добытых кирпичей, а не от текущих
             const targetFloor = Math.floor(state.totalBricksEarned / BRICKS_PER_FLOOR) + 1;
             if (targetFloor > state.floor) {
                 state.floor = targetFloor;
@@ -658,7 +659,7 @@
             saveGameData();
         }
 
-        // ИЗМЕНЕННАЯ ЛОГИКА ПРОДАЖИ: Этажи сносятся, если кирпичей становится меньше нужного
+        // ЛОГИКА ПРОДАЖИ: Этажи НЕ сносятся. Просто продаем лишнее.
         function sellBricks(amountType) {
             if (state.bricks <= 0) { showToast('Нет кирпичей для продажи!', 'error'); return; }
             let amountToSell = amountType === 'all' ? state.bricks : Math.min(state.bricks, amountType);
@@ -669,16 +670,8 @@
             state.money += earnedMoney;
             state.bargerPrice = Math.floor(Math.random() * 4) + 1;
 
-            // Пересчитываем этаж исходя из ОСТАВШИХСЯ кирпичей
-            const newFloor = Math.floor(state.bricks / BRICKS_PER_FLOOR) + 1;
-            if (newFloor < state.floor) {
-                state.floor = newFloor;
-                showToast('Кирпичи проданы! Этажи снесены.', 'error');
-            } else {
-                showToast(`Продано ${formatNumber(amountToSell)} шт. за ${formatNumber(earnedMoney)} ₽`, 'success');
-            }
-
             playSoundEffect(800, 0.1);
+            showToast(`Продано ${formatNumber(amountToSell)} шт. за ${formatNumber(earnedMoney)} ₽`, 'success');
             renderAllUI(); saveGameData();
         }
 
@@ -727,10 +720,11 @@
             renderAllUI(); saveGameData();
         }
 
+        // ТИХИЙ ЭТАЖ (без всплывающего окна)
         function triggerNewFloorEvent() {
             playSoundEffect(1200, 0.2);
-            spawnConfetti(30);
-            showModalWindow('Новый этаж!', `Поздравляем! Ты накопил кирпичей на ${state.floor}-й этаж!`, 'star');
+            spawnConfetti(15);
+            showToast(`Построен ${state.floor}-й этаж!`, 'success');
         }
 
         // --- ЛОГИКА БРИГАДИРА (ПРОВЕРКИ) ---
@@ -793,7 +787,8 @@
             document.getElementById('val-barger-price').textContent = state.bargerPrice + ' ₽';
             document.getElementById('val-passive').textContent = formatNumber(calculatePassiveIncome());
             
-            const currentProgress = state.bricks % BRICKS_PER_FLOOR;
+            // Прогресс-бар этажа зависит от общего количества кирпичей (totalBricksEarned)
+            const currentProgress = state.totalBricksEarned % BRICKS_PER_FLOOR;
             document.getElementById('floor-fill').style.width = (currentProgress / BRICKS_PER_FLOOR) * 100 + '%';
             document.getElementById('val-floor-progress').textContent = `${formatNumber(currentProgress)} / ${BRICKS_PER_FLOOR} до этажа`;
         }
@@ -815,34 +810,31 @@
             camera.style.transform = `translateY(${floorsAboveBase * 15}px)`;
         }
 
-        // --- ОБНОВЛЕННАЯ ОТРИСОВКА РАБОЧИХ НА ЗЕМЛЕ ---
         function renderWorkers() {
             const container = document.getElementById('workers-render');
             container.innerHTML = '';
             
-            // Ограничиваем для визуала
             const maxMasons = 5;
             const maxMixers = 3;
             const maxCranes = 2;
             const maxForemen = 2;
 
-            let leftPos = 5; // Начальный отступ слева
-            let rightPos = 5; // Отступ справа
+            let leftPos = 10;
+            let rightPos = 10;
 
-            // 1. Рисуем Каменщиков (слева)
+            // 1. Каменщики (слева)
             const masonCount = Math.min(state.units.mason || 0, maxMasons);
             for (let i = 0; i < masonCount; i++) {
                 const svg = `
                 <svg class="worker-svg" style="left: ${leftPos}px; width: 25px; height: 25px;" viewBox="0 0 24 24" fill="none">
                     <circle cx="12" cy="6" r="3" fill="#FFD60A"/>
                     <path d="M8 21v-6a4 4 0 0 1 8 0v6" stroke="#FF6B1A" stroke-width="3" stroke-linecap="round"/>
-                    <rect x="15" y="9" width="6" height="2" fill="#8A94A6" transform="rotate(30 15 9)"/>
                 </svg>`;
                 container.innerHTML += svg;
                 leftPos += 25;
             }
 
-            // 2. Рисуем Бетономешалки (слева, подальше)
+            // 2. Бетономешалки (слева)
             const mixerCount = Math.min(state.units.mixer || 0, maxMixers);
             for (let i = 0; i < mixerCount; i++) {
                 const svg = `
@@ -855,7 +847,7 @@
                 leftPos += 35;
             }
 
-            // 3. Рисуем Краны (справа)
+            // 3. Краны (справа)
             const craneCount = Math.min(state.units.crane || 0, maxCranes);
             for (let i = 0; i < craneCount; i++) {
                 const svg = `
@@ -863,14 +855,12 @@
                     <path d="M6 22V4h12" stroke="#FFD60A" stroke-width="2"/>
                     <path d="M6 4l10 5M16 4v6" stroke="#FFD60A" stroke-width="2"/>
                     <rect x="14" y="12" width="4" height="4" fill="#FF6B1A"/>
-                    <path d="M16 16v4" stroke="#8A94A6" stroke-width="1"/>
-                    <circle cx="16" cy="20" r="1" fill="#FFD60A"/>
                 </svg>`;
                 container.innerHTML += svg;
-                rightPos += 40;
+                rightPos += 45;
             }
 
-            // 4. Рисуем Бригадиров (по центру)
+            // 4. Бригадиры (по центру)
             const foremanCount = Math.min(state.units.foreman || 0, maxForemen);
             for (let i = 0; i < foremanCount; i++) {
                 const svg = `
@@ -1012,8 +1002,7 @@
                 if (income > 0) {
                     state.bricks += income;
                     state.totalBricksEarned += income;
-                    // При пассивном доходе этажи не растут бесконечно вверх, если кирпичей мало,
-                    // но мы добавляем кирпичи, значит прогресс-бар будет расти.
+                    checkFloorProgress();
                     renderResourceBar(); renderBuilding();
                 }
             }, 1000);
