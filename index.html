@@ -300,7 +300,6 @@
                 <div class="section-title">Улучшения инструментов</div>
                 <div id="list-upgrades"></div>
                 
-                <!-- НОВЫЙ БЛОК: УЛУЧШЕНИЕ ЭНЕРГИИ -->
                 <div class="section-title">Склад энергии</div>
                 <div class="ui-card">
                     <div class="ui-card-icon" style="background:var(--color-accent-yellow); color:var(--color-bg-main);">
@@ -405,13 +404,25 @@
         </div>
     </div>
 
+    <!-- МОДАЛЬНОЕ ОКНО ОБЩЕГО НАЗНАЧЕНИЯ (Для промокодов и этажей) -->
+    <div class="modal-overlay" id="modal-window">
+        <div class="modal-content">
+            <div class="modal-icon-wrapper" id="modal-icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.6 5.6 6 .8-4.4 4.2 1.1 6L12 15.8 6.7 18.6l1.1-6L3.4 8.4l6-.8L12 2Z" fill="currentColor"/></svg>
+            </div>
+            <h3 class="modal-title" id="modal-title">Заголовок</h3>
+            <p class="modal-text" id="modal-desc">Описание события или награды.</p>
+            <button class="modal-button" onclick="closeModalWindow()">Забрать</button>
+        </div>
+    </div>
+
     <script>
         const MAX_CLICKS_PER_SEC = 25;
         let ENERGY_MAX = 1000; // Теперь это переменная, ее можно качать
         const ENERGY_REGEN_RATE = 1;
         const BRICKS_PER_FLOOR = 500;
         const MAX_OFFLINE_TIME = 28800; // 8 часов
-        const SAVE_KEY = 'my_brigada_save_data_v10';
+        const SAVE_KEY = 'my_brigada_save_data_v11';
 
         const GAME_UNITS = {
             mason: { name: 'Каменщик', baseCost: 100, income: 1, desc: '+1 кирпич/сек' },
@@ -437,7 +448,7 @@
         let state = {
             telegramId: 0, firstName: 'Строитель',
             bricks: 0, money: 0, stars: 0,
-            floor: 1, energy: 1000, energyLvl: 0, // Уровень прокачки энергии
+            floor: 1, energy: 1000, energyLvl: 0,
             totalBricksEarned: 0,
             units: {}, upgrades: {}, autoClickerLvl: 0,
             bargerPrice: 2,
@@ -471,12 +482,9 @@
                     state = { ...state, ...parsed };
                     if (!state.settings) state.settings = { sound: true, volume: 0.5, vibration: true };
                     
-                    // Пересчитываем максимальную энергию исходя из уровня
                     ENERGY_MAX = 1000 + (state.energyLvl * 1000);
                     
                     const now = Date.now();
-                    
-                    // --- ЛОГИКА ОФФЛАЙН-ДОХОДА ---
                     const secondsPassed = Math.floor((now - lastSaved) / 1000);
                     
                     if (secondsPassed > 10) { 
@@ -683,10 +691,8 @@
             renderAllUI(); saveGameData();
         }
 
-        // --- ПОКУПКА УЛУЧШЕНИЯ ЭНЕРГИИ ---
         function buyEnergyUpgrade() {
             const currentLvl = state.energyLvl || 0;
-            // Цена: 1-й ур: 800, 2-й: 2300, 3-й: 3800 и т.д.
             const cost = 800 + (currentLvl * 1500); 
             
             if (state.money < cost) { showToast('Не хватает рублей!', 'error'); return; }
@@ -695,7 +701,6 @@
             state.energyLvl += 1;
             ENERGY_MAX = 1000 + (state.energyLvl * 1000);
             
-            // Даем игроку сразу полную энергию при улучшении
             state.energy = ENERGY_MAX; 
             
             playSoundEffect(1000, 0.2); 
@@ -765,7 +770,7 @@
             document.getElementById('val-money').textContent = formatNumber(state.money) + ' ₽';
             document.getElementById('val-stars').textContent = formatNumber(state.stars);
             document.getElementById('val-energy').textContent = Math.floor(state.energy);
-            document.getElementById('val-max-energy').textContent = ENERGY_MAX; // Обновляем макс. энергию
+            document.getElementById('val-max-energy').textContent = ENERGY_MAX; 
             document.getElementById('energy-fill').style.width = Math.max(0, Math.min(100, (state.energy / ENERGY_MAX) * 100)) + '%';
             document.getElementById('val-barger-price').textContent = state.bargerPrice + ' ₽';
             document.getElementById('val-passive').textContent = formatNumber(calculatePassiveIncome());
@@ -849,7 +854,6 @@
                     </div>`;
             }
             
-            // Обновление кнопки Автокликера
             const autoLvl = state.autoClickerLvl || 0;
             const autoCost = 2000 * (autoLvl + 1);
             document.getElementById('val-auto-lvl').textContent = autoLvl > 0 ? `Ур.${autoLvl}` : '';
@@ -857,7 +861,6 @@
             autoBtn.textContent = formatNumber(autoCost) + ' ₽';
             autoBtn.disabled = state.money < autoCost;
 
-            // Обновление кнопки Энергии
             const energyLvl = state.energyLvl || 0;
             const energyCost = 800 + (energyLvl * 1500);
             document.getElementById('val-energy-lvl').textContent = energyLvl > 0 ? `Ур.${energyLvl}` : '';
