@@ -45,784 +45,184 @@
     background:linear-gradient(180deg,var(--dark-2) 0%,var(--dark) 100%);
   }
 
+  /* ===== ЭКРАН ПОДПИСКИ ===== */
+  #subscribe-screen {
+    position: fixed; inset: 0; background: var(--dark); z-index: 99999;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 24px; text-align: center;
+  }
+  #subscribe-screen h2 { font-size: 28px; margin-bottom: 12px; background: linear-gradient(90deg,var(--orange),var(--yellow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  #subscribe-screen p { font-size: 15px; color: var(--gray); margin-bottom: 30px; line-height: 1.5; }
+  #subscribe-screen .tg-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; max-width: 300px; padding: 16px; border-radius: 16px;
+    background: #2AABEE; color: white; text-decoration: none; font-weight: 800; font-size: 16px; margin-bottom: 20px;
+  }
+  #subscribe-screen .check-btn {
+    width: 100%; max-width: 300px; padding: 16px; border-radius: 16px;
+    background: var(--orange); color: white; border: none; font-weight: 800; font-size: 16px; cursor: pointer;
+  }
+
   /* ===== HEADER ===== */
-  .header{
-    padding:12px 16px 8px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-shrink:0;
-  }
-  .logo{
-    font-size:20px;
-    font-weight:900;
-    letter-spacing:.5px;
-    background:linear-gradient(90deg,var(--orange),var(--yellow));
-    -webkit-background-clip:text;
-    background-clip:text;
-    -webkit-text-fill-color:transparent;
-  }
-  .header-actions{display:flex;gap:8px;}
-  .icon-btn{
-    width:36px;height:36px;
-    border-radius:12px;
-    background:var(--dark-3);
-    border:none;
-    color:var(--white);
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;
-    transition:transform .1s,background .2s;
-  }
-  .icon-btn:active{transform:scale(.9);}
-  .icon-btn.active{background:var(--orange);}
+  .header{ padding:12px 16px 8px; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+  .logo{ font-size:20px; font-weight:900; background:linear-gradient(90deg,var(--orange),var(--yellow)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .icon-btn{ width:36px;height:36px; border-radius:12px; background:var(--dark-3); border:none; color:var(--white); display:flex;align-items:center;justify-content:center; cursor:pointer; }
 
   /* ===== TOP STATS ===== */
-  .stats-bar{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:8px;
-    padding:0 16px 12px;
-    flex-shrink:0;
-  }
-  .stat{
-    background:var(--dark-3);
-    border-radius:12px;
-    padding:8px 10px;
-    display:flex;
-    align-items:center;
-    gap:6px;
-    font-weight:700;
-    font-size:13px;
-    min-width:0;
-  }
-  .stat svg{flex-shrink:0;}
+  .stats-bar{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; padding:0 16px 12px; flex-shrink:0; }
+  .stat{ background:var(--dark-3); border-radius:12px; padding:8px 10px; display:flex; align-items:center; gap:6px; font-weight:700; font-size:13px; min-width:0; }
   .stat span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .stat.money span{color:var(--green);}
   .stat.bricks span{color:var(--orange);}
   .stat.stars span{color:var(--yellow);}
 
   /* ===== SCREENS ===== */
-  .screens{
-    flex:1;
-    overflow-y:auto;
-    overflow-x:hidden;
-    padding:0 16px 16px;
-    scrollbar-width:none;
-  }
+  .screens{ flex:1; overflow-y:auto; overflow-x:hidden; padding:0 16px 16px; scrollbar-width:none; }
   .screens::-webkit-scrollbar{display:none;}
-  .screen{display:none;animation:fadeIn .25s ease;}
+  .screen{display:none;}
   .screen.active{display:block;}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
-
-  .section-title{
-    font-size:15px;
-    font-weight:800;
-    margin:16px 0 10px;
-    color:var(--gray);
-    text-transform:uppercase;
-    letter-spacing:.5px;
-  }
+  .section-title{ font-size:15px; font-weight:800; margin:16px 0 10px; color:var(--gray); text-transform:uppercase; }
 
   /* ===== BUILD SCREEN ===== */
   .building-wrap{
-    position:relative;
-    height:240px;
-    margin:8px 0 12px;
-    border-radius:var(--radius);
-    background:linear-gradient(180deg,#1E2940 0%,#10161F 100%);
-    overflow:hidden;
-    display:flex;
-    align-items:flex-end;
-    justify-content:center;
-    border:1px solid rgba(255,255,255,.06);
+    position:relative; height:260px; margin:8px 0 12px; border-radius:var(--radius);
+    background:linear-gradient(180deg,#1E2940 0%,#10161F 100%); overflow:hidden; border:1px solid rgba(255,255,255,.06);
   }
-  .skyline{
-    position:absolute;
-    bottom:0;left:0;right:0;
-    height:60px;
-    background:
-      repeating-linear-gradient(90deg,
-        rgba(255,255,255,.03) 0 20px,
-        transparent 20px 40px);
-  }
-  .stars-bg{
-    position:absolute;inset:0;
-    background-image:
-      radial-gradient(1.5px 1.5px at 20% 20%,rgba(255,255,255,.5),transparent),
-      radial-gradient(1.5px 1.5px at 70% 15%,rgba(255,255,255,.4),transparent),
-      radial-gradient(1px 1px at 45% 30%,rgba(255,255,255,.4),transparent),
-      radial-gradient(1.5px 1.5px at 85% 35%,rgba(255,255,255,.3),transparent),
-      radial-gradient(1px 1px at 10% 45%,rgba(255,255,255,.3),transparent);
-  }
-  .building{
-    position:relative;
-    width:130px;
-    display:flex;
-    flex-direction:column-reverse;
-    align-items:center;
-    z-index:2;
-    margin-bottom:60px;
-  }
-  .floor{
-    width:100%;
-    height:10px;
-    background:linear-gradient(180deg,var(--orange),var(--orange-dark));
-    border-top:1px solid rgba(255,255,255,.25);
-    border-radius:2px;
-    animation:floorPop .3s ease;
-    position:relative;
-  }
-  .floor::after{
-    content:"";
-    position:absolute;
-    top:2px;left:6px;right:6px;bottom:2px;
-    background:repeating-linear-gradient(90deg,
-      rgba(255,255,255,.12) 0 6px,
-      transparent 6px 14px);
-  }
-  @keyframes floorPop{from{transform:scaleY(0);opacity:0;}to{transform:scaleY(1);opacity:1;}}
-  .crane{
-    position:absolute;
-    right:24px;
-    bottom:60px;
-    width:4px;
-    height:150px;
-    background:var(--yellow);
-    z-index:1;
-    border-radius:2px;
-  }
-  .crane::before{
-    content:"";
-    position:absolute;
-    top:0;left:-50px;
-    width:100px;
-    height:4px;
-    background:var(--yellow);
-    border-radius:2px;
-  }
-  .crane::after{
-    content:"";
-    position:absolute;
-    top:4px;right:0;
-    width:2px;
-    height:50px;
-    background:var(--gray);
-  }
-  .floor-counter{
-    position:absolute;
-    top:12px;left:12px;
-    background:rgba(0,0,0,.45);
-    padding:6px 12px;
-    border-radius:20px;
-    font-weight:800;
-    font-size:14px;
-    z-index:3;
-    display:flex;align-items:center;gap:6px;
-  }
+  .camera { position: absolute; bottom: 40px; left: 0; right: 0; display: flex; flex-direction: column-reverse; align-items: center; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .floor{ width:100px; height:14px; background:linear-gradient(180deg,var(--orange),var(--orange-dark)); border-top:2px solid rgba(255,255,255,.4); border-bottom:1px solid rgba(0,0,0,.5); position:relative; box-shadow: 0 2px 5px rgba(0,0,0,.3); }
+  .floor::before { content: ""; position: absolute; top: 4px; left: 10px; width: 10px; height: 4px; background: #FFD60A; box-shadow: 20px 0 0 #FFD60A, 40px 0 0 #FFD60A, 60px 0 0 #FFD60A; opacity: 0.6; }
+  .skyline{ position:absolute; bottom:0;left:0;right:0; height:40px; background: #10161F; border-top: 2px solid #232D42; z-index: 2; }
+  .floor-counter{ position:absolute; top:12px;left:12px; background:rgba(0,0,0,.6); padding:6px 12px; border-radius:20px; font-weight:800; font-size:14px; z-index:3; border: 1px solid rgba(255,255,255,.1); }
 
-  /* ===== MAIN CLICK BUTTON ===== */
-  .click-area{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:12px;
-    margin:8px 0 16px;
-  }
+  /* ===== CLICK BUTTON ===== */
+  .click-area{ display:flex; flex-direction:column; align-items:center; gap:12px; margin:8px 0 16px; }
   #buildBtn{
-    width:170px;height:170px;
-    border-radius:50%;
-    border:none;
+    width:140px;height:140px; border-radius:50%; border:none;
     background:radial-gradient(circle at 30% 30%,#FF8A3D,var(--orange) 60%,var(--orange-dark));
-    box-shadow:0 10px 30px rgba(255,107,26,.4),inset 0 -6px 12px rgba(0,0,0,.25);
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;
-    transition:transform .08s;
-    position:relative;
+    box-shadow:0 10px 30px rgba(255,107,26,.4); display:flex;align-items:center;justify-content:center; cursor:pointer;
   }
   #buildBtn:active{transform:scale(.94);}
-  #buildBtn svg{width:76px;height:76px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.3));}
-  .energy-bar{
-    width:100%;
-    max-width:280px;
-    height:10px;
-    background:var(--dark-3);
-    border-radius:6px;
-    overflow:hidden;
-    position:relative;
-  }
-  .energy-fill{
-    height:100%;
-    width:100%;
-    background:linear-gradient(90deg,var(--yellow),var(--orange));
-    transition:width .3s;
-    border-radius:6px;
-  }
-  .energy-text{
-    font-size:12px;
-    color:var(--gray);
-    font-weight:600;
-    display:flex;align-items:center;gap:6px;
-  }
+  #buildBtn svg{width:64px;height:64px;}
+  .energy-bar{ width:100%; max-width:280px; height:10px; background:var(--dark-3); border-radius:6px; overflow:hidden; }
+  .energy-fill{ height:100%; width:100%; background:linear-gradient(90deg,var(--yellow),var(--orange)); transition:width .3s; }
+  
+  /* float text */
+  .float-text{ position:absolute; pointer-events:none; font-weight:900; font-size:22px; color:var(--yellow); text-shadow:0 2px 8px rgba(0,0,0,.6); animation:floatUp .8s ease forwards; z-index:99; }
+  @keyframes floatUp{ 0%{opacity:1;transform:translateY(0) scale(1);} 100%{opacity:0;transform:translateY(-80px) scale(1.4);} }
 
-  /* floating +N */
-  .float-text{
-    position:absolute;
-    pointer-events:none;
-    font-weight:900;
-    font-size:22px;
-    color:var(--yellow);
-    text-shadow:0 2px 8px rgba(0,0,0,.6);
-    animation:floatUp .8s ease forwards;
-    z-index:99;
-  }
-  @keyframes floatUp{
-    0%{opacity:1;transform:translateY(0) scale(1);}
-    100%{opacity:0;transform:translateY(-80px) scale(1.4);}
-  }
-
-  /* ===== CARDS / LISTS ===== */
-  .card{
-    background:var(--dark-3);
-    border-radius:var(--radius);
-    padding:14px;
-    margin-bottom:10px;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    border:1px solid rgba(255,255,255,.05);
-    transition:transform .1s;
-  }
-  .card:active{transform:scale(.98);}
-  .card-icon{
-    width:48px;height:48px;
-    border-radius:12px;
-    background:var(--dark-2);
-    display:flex;align-items:center;justify-content:center;
-    flex-shrink:0;
-    color:var(--orange);
-  }
+  /* ===== CARDS ===== */
+  .card{ background:var(--dark-3); border-radius:var(--radius); padding:14px; margin-bottom:10px; display:flex; align-items:center; gap:12px; border:1px solid rgba(255,255,255,.05); }
+  .card-icon{ width:48px;height:48px; border-radius:12px; background:var(--dark-2); display:flex;align-items:center;justify-content:center; flex-shrink:0; color:var(--orange); }
   .card-body{flex:1;min-width:0;}
-  .card-title{font-weight:800;font-size:15px;margin-bottom:2px;}
-  .card-sub{font-size:12px;color:var(--gray);}
+  .card-title{font-weight:800; font-size:15px;}
+  .card-sub{font-size:12px; color:var(--gray); margin-top:2px;}
   .card-sub b{color:var(--green);}
-  .card-btn{
-    padding:8px 14px;
-    border-radius:10px;
-    border:none;
-    background:var(--orange);
-    color:var(--white);
-    font-weight:800;
-    font-size:13px;
-    cursor:pointer;
-    white-space:nowrap;
-    transition:transform .1s,opacity .2s;
-  }
-  .card-btn:active{transform:scale(.94);}
-  .card-btn:disabled{opacity:.4;cursor:not-allowed;}
+  
+  .card-btn{ padding:8px 12px; border-radius:10px; border:none; background:var(--orange); color:var(--white); font-weight:800; font-size:13px; cursor:pointer; }
+  .card-btn:disabled{opacity:.4;}
   .card-btn.green{background:var(--green);}
   .card-btn.purple{background:var(--purple);}
-  .card-btn.yellow{background:var(--yellow);color:var(--dark);}
 
-  /* progress bar in cards */
-  .mini-bar{
-    height:4px;
-    background:var(--dark-2);
-    border-radius:3px;
-    margin-top:6px;
-    overflow:hidden;
-  }
-  .mini-fill{
-    height:100%;
-    background:var(--orange);
-    border-radius:3px;
-    transition:width .3s;
-  }
+  /* Кнопки барыги (маленькие) */
+  .btn-group { display: flex; gap: 4px; }
+  .btn-group button { padding: 6px 8px; font-size: 11px; border-radius: 8px; }
 
-  /* ===== SHOP ===== */
-  .shop-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-  }
-  .shop-item{
-    background:var(--dark-3);
-    border-radius:var(--radius);
-    padding:14px;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-    border:1px solid rgba(255,255,255,.05);
-  }
-  .shop-item .shop-icon{
-    width:44px;height:44px;
-    border-radius:12px;
-    background:var(--dark-2);
-    display:flex;align-items:center;justify-content:center;
-    color:var(--yellow);
-  }
-  .shop-item .shop-name{font-weight:800;font-size:14px;}
-  .shop-item .shop-desc{font-size:11px;color:var(--gray);line-height:1.3;}
-  .shop-item .shop-price{
-    display:flex;align-items:center;gap:4px;
-    font-weight:800;font-size:13px;color:var(--yellow);
-    margin-top:auto;
-  }
-  .shop-item button{
-    padding:8px;
-    border-radius:10px;
-    border:none;
-    background:var(--orange);
-    color:var(--white);
-    font-weight:800;
-    font-size:13px;
-    cursor:pointer;
-  }
-  .shop-item button:active{transform:scale(.95);}
-  .shop-item button:disabled{opacity:.4;}
+  /* ===== SETTINGS ===== */
+  .setting-row { display: flex; justify-content: space-between; align-items: center; background: var(--dark-3); padding: 16px; border-radius: var(--radius); margin-bottom: 10px; border: 1px solid rgba(255,255,255,.05); }
+  .setting-info h4 { font-size: 15px; margin-bottom: 4px; }
+  .setting-info p { font-size: 12px; color: var(--gray); }
+  
+  .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--dark); transition: .4s; border-radius: 34px; border: 2px solid var(--gray); }
+  .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 2px; bottom: 2px; background-color: var(--gray); transition: .4s; border-radius: 50%; }
+  input:checked + .slider { background-color: var(--orange); border-color: var(--orange); }
+  input:checked + .slider:before { transform: translateX(22px); background-color: white; }
 
-  /* ===== EVENTS ===== */
-  .event-banner{
-    background:linear-gradient(135deg,var(--purple),#6C3483);
-    border-radius:var(--radius);
-    padding:16px;
-    margin-bottom:10px;
-    position:relative;
-    overflow:hidden;
-  }
-  .event-banner::before{
-    content:"";
-    position:absolute;
-    top:-40px;right:-40px;
-    width:120px;height:120px;
-    background:rgba(255,255,255,.1);
-    border-radius:50%;
-  }
-  .event-title{font-weight:900;font-size:16px;margin-bottom:4px;}
-  .event-desc{font-size:12px;opacity:.9;margin-bottom:12px;line-height:1.4;}
-  .event-progress{
-    height:8px;
-    background:rgba(0,0,0,.3);
-    border-radius:5px;
-    overflow:hidden;
-    margin-bottom:6px;
-  }
-  .event-progress div{
-    height:100%;
-    background:var(--yellow);
-    border-radius:5px;
-    transition:width .3s;
-  }
-  .event-meta{font-size:11px;opacity:.8;display:flex;justify-content:space-between;}
-  .event-banner .card-btn{margin-top:10px;width:100%;}
+  input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: var(--orange); cursor: pointer; margin-top: -8px; }
+  input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: var(--dark); border-radius: 2px; }
 
-  /* ===== LEADERBOARD ===== */
-  .lb-row{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:12px 14px;
-    background:var(--dark-3);
-    border-radius:12px;
-    margin-bottom:8px;
-    border:1px solid rgba(255,255,255,.05);
-  }
-  .lb-row.me{border-color:var(--orange);background:rgba(255,107,26,.1);}
-  .lb-rank{
-    width:28px;height:28px;
-    border-radius:8px;
-    background:var(--dark-2);
-    display:flex;align-items:center;justify-content:center;
-    font-weight:900;font-size:13px;
-    flex-shrink:0;
-  }
-  .lb-rank.gold{background:linear-gradient(135deg,#FFD700,#FFA500);color:var(--dark);}
-  .lb-rank.silver{background:linear-gradient(135deg,#C0C0C0,#A0A0A0);color:var(--dark);}
-  .lb-rank.bronze{background:linear-gradient(135deg,#CD7F32,#8B4513);color:var(--white);}
-  .lb-name{flex:1;font-weight:700;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .lb-score{font-weight:800;font-size:13px;color:var(--orange);}
-
-  /* ===== PROFILE ===== */
-  .profile-head{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    padding:16px;
-    background:var(--dark-3);
-    border-radius:var(--radius);
-    margin-bottom:12px;
-  }
-  .avatar{
-    width:64px;height:64px;
-    border-radius:50%;
-    background:linear-gradient(135deg,var(--orange),var(--yellow));
-    display:flex;align-items:center;justify-content:center;
-    font-weight:900;font-size:24px;
-    color:var(--dark);
-    flex-shrink:0;
-  }
-  .profile-info h3{font-size:17px;margin-bottom:2px;}
-  .profile-info p{font-size:12px;color:var(--gray);}
-
-  .profile-stats{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-bottom:12px;
-  }
-  .p-stat{
-    background:var(--dark-3);
-    border-radius:12px;
-    padding:12px;
-    text-align:center;
-  }
-  .p-stat .num{font-size:20px;font-weight:900;color:var(--orange);}
-  .p-stat .lbl{font-size:11px;color:var(--gray);margin-top:2px;}
-
-  .ref-box{
-    background:linear-gradient(135deg,#1E3A5F,#0F1E33);
-    border-radius:var(--radius);
-    padding:16px;
-    margin-bottom:12px;
-    border:1px solid rgba(255,255,255,.08);
-  }
-  .ref-box h4{font-size:15px;margin-bottom:6px;}
-  .ref-box p{font-size:12px;color:var(--gray);margin-bottom:12px;line-height:1.4;}
-  .ref-link{
-    display:flex;
-    gap:8px;
-  }
-  .ref-link input{
-    flex:1;
-    background:var(--dark);
-    border:1px solid rgba(255,255,255,.1);
-    border-radius:10px;
-    padding:10px 12px;
-    color:var(--white);
-    font-size:12px;
-    font-weight:600;
-    min-width:0;
-  }
-  .ref-link button{
-    padding:10px 16px;
-    border-radius:10px;
-    border:none;
-    background:var(--orange);
-    color:var(--white);
-    font-weight:800;
-    font-size:13px;
-    cursor:pointer;
-    white-space:nowrap;
-  }
-
-  /* ===== PROMO ===== */
-  .promo-box{
-    background:var(--dark-3);
-    border-radius:var(--radius);
-    padding:16px;
-    margin-bottom:12px;
-  }
-  .promo-box h4{font-size:15px;margin-bottom:10px;}
-  .promo-input{
-    display:flex;
-    gap:8px;
-  }
-  .promo-input input{
-    flex:1;
-    background:var(--dark);
-    border:1px solid rgba(255,255,255,.1);
-    border-radius:10px;
-    padding:12px 14px;
-    color:var(--white);
-    font-size:14px;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:1px;
-    min-width:0;
-  }
-  .promo-input button{
-    padding:12px 18px;
-    border-radius:10px;
-    border:none;
-    background:var(--green);
-    color:var(--white);
-    font-weight:800;
-    font-size:14px;
-    cursor:pointer;
-  }
-
-  /* ===== TOAST ===== */
-  #toast{
-    position:fixed;
-    bottom:90px;
-    left:50%;
-    transform:translateX(-50%) translateY(20px);
-    background:var(--dark-3);
-    border:1px solid rgba(255,255,255,.1);
-    padding:12px 20px;
-    border-radius:14px;
-    font-weight:700;
-    font-size:14px;
-    box-shadow:var(--shadow);
-    opacity:0;
-    pointer-events:none;
-    transition:all .3s;
-    z-index:9999;
-    max-width:90%;
-    text-align:center;
-  }
-  #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-  #toast.success{border-color:var(--green);}
-  #toast.error{border-color:var(--red);}
-
-  /* ===== MODAL ===== */
-  .modal-overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.7);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    z-index:10000;
-    padding:20px;
-    backdrop-filter:blur(4px);
-  }
-  .modal-overlay.show{display:flex;}
-  .modal{
-    background:var(--dark-2);
-    border-radius:20px;
-    padding:24px;
-    max-width:340px;
-    width:100%;
-    text-align:center;
-    border:1px solid rgba(255,255,255,.1);
-    animation:modalIn .3s ease;
-  }
-  @keyframes modalIn{from{transform:scale(.9);opacity:0;}to{transform:scale(1);opacity:1;}}
-  .modal-icon{
-    width:72px;height:72px;
-    margin:0 auto 16px;
-    border-radius:50%;
-    background:rgba(255,107,26,.15);
-    display:flex;align-items:center;justify-content:center;
-    color:var(--orange);
-  }
-  .modal h3{font-size:19px;margin-bottom:8px;}
-  .modal p{font-size:14px;color:var(--gray);line-height:1.5;margin-bottom:20px;}
-  .modal button{
-    width:100%;
-    padding:14px;
-    border-radius:12px;
-    border:none;
-    background:var(--orange);
-    color:var(--white);
-    font-weight:800;
-    font-size:15px;
-    cursor:pointer;
-  }
-  .modal button:active{transform:scale(.97);}
-
-  /* ===== DAILY REWARD ===== */
-  .daily-rewards{
-    display:grid;
-    grid-template-columns:repeat(7,1fr);
-    gap:6px;
-    margin-bottom:12px;
-  }
-  .day{
-    aspect-ratio:1;
-    border-radius:10px;
-    background:var(--dark-2);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    font-size:10px;
-    font-weight:700;
-    gap:3px;
-    border:1px solid rgba(255,255,255,.05);
-    color:var(--gray);
-  }
-  .day .d-num{font-size:9px;opacity:.6;}
-  .day .d-val{font-size:11px;color:var(--white);}
-  .day.claimed{background:rgba(46,204,113,.15);border-color:var(--green);color:var(--green);}
-  .day.claimed .d-val{color:var(--green);}
-  .day.today{background:rgba(255,107,26,.2);border-color:var(--orange);color:var(--orange);}
-  .day.today .d-val{color:var(--orange);}
-
-  /* ===== BOTTOM NAV ===== */
-  .nav{
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
-    padding:8px 8px 12px;
-    background:var(--dark-2);
-    border-top:1px solid rgba(255,255,255,.06);
-    flex-shrink:0;
-    padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));
-  }
-  .nav-btn{
-    background:none;
-    border:none;
-    color:var(--gray);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:3px;
-    font-size:10px;
-    font-weight:700;
-    cursor:pointer;
-    padding:4px 10px;
-    border-radius:10px;
-    transition:color .2s,background .2s;
-    flex:1;
-  }
+  /* ===== NAV ===== */
+  .nav{ display:flex; justify-content:space-around; align-items:center; padding:8px 8px 12px; background:var(--dark-2); border-top:1px solid rgba(255,255,255,.06); flex-shrink:0; padding-bottom:calc(12px + env(safe-area-inset-bottom,0px)); }
+  .nav-btn{ background:none; border:none; color:var(--gray); display:flex; flex-direction:column; align-items:center; gap:3px; font-size:10px; font-weight:700; cursor:pointer; padding:4px 10px; border-radius:10px; }
   .nav-btn.active{color:var(--orange);background:rgba(255,107,26,.1);}
-  .nav-btn:active{transform:scale(.92);}
 
-  /* ===== CONFETTI ===== */
-  .confetti{
-    position:fixed;
-    width:8px;height:8px;
-    pointer-events:none;
-    z-index:10001;
-    animation:confettiFall linear forwards;
-  }
-  @keyframes confettiFall{
-    0%{transform:translateY(0) rotate(0);opacity:1;}
-    100%{transform:translateY(100vh) rotate(720deg);opacity:0;}
-  }
-
-  /* ===== SHAKE ===== */
-  @keyframes shake{
-    0%,100%{transform:translateX(0);}
-    25%{transform:translateX(-6px);}
-    75%{transform:translateX(6px);}
-  }
-  .shake{animation:shake .3s;}
-
-  /* ===== INSPECTOR ===== */
-  .inspector-overlay{
-    position:fixed;inset:0;
-    background:rgba(0,0,0,.85);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    z-index:10002;
-    padding:20px;
-  }
-  .inspector-overlay.show{display:flex;}
-  .inspector{
-    background:var(--dark-2);
-    border-radius:20px;
-    padding:24px;
-    max-width:340px;
-    text-align:center;
-    border:2px solid var(--red);
-    animation:modalIn .3s;
-  }
-  .inspector h3{color:var(--red);font-size:18px;margin-bottom:8px;}
-  .inspector p{font-size:13px;color:var(--gray);margin-bottom:16px;line-height:1.4;}
-  .inspector .btn-row{display:flex;gap:8px;}
-  .inspector button{
-    flex:1;padding:12px;border-radius:12px;border:none;
-    font-weight:800;font-size:14px;cursor:pointer;
-  }
-  .inspector .pay{background:var(--red);color:var(--white);}
-  .inspector .bribe{background:var(--yellow);color:var(--dark);}
+  #toast{ position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--dark-3); border:1px solid rgba(255,255,255,.1); padding:12px 20px; border-radius:14px; font-weight:700; font-size:14px; opacity:0; transition:all .3s; z-index:9999; text-align:center; }
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .confetti{position:fixed; width:8px; height:8px; pointer-events:none; z-index:10001; animation:confettiFall linear forwards;}
+  @keyframes confettiFall{0%{transform:translateY(0) rotate(0);opacity:1;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}
 </style>
 </head>
 <body>
-<div id="app">
 
-  <!-- HEADER -->
+<!-- ЭКРАН ПОДПИСКИ -->
+<div id="subscribe-screen">
+  <h2>Добро пожаловать!</h2>
+  <p>Чтобы начать играть в <b>MY BRIGADA</b>, подпишись на наш официальный канал с новостями, ивентами и промокодами.</p>
+  <a href="https://t.me/Mybriga" target="_blank" class="tg-btn">Подписаться на канал</a>
+  <button class="check-btn" onclick="checkSubscription()">Я подписался, играть!</button>
+</div>
+
+<div id="app" style="display: none;">
   <div class="header">
     <div class="logo">MY BRIGADA</div>
     <div class="header-actions">
-      <button class="icon-btn" id="soundBtn" title="Звук">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <path d="M4 9v6h4l5 4V5L8 9H4Z" fill="currentColor"/>
-          <path d="M16 8a5 5 0 0 1 0 8M18.5 5.5a9 9 0 0 1 0 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </button>
-      <button class="icon-btn" id="dailyBtn" title="Ежедневная награда">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2l2.6 5.6 6 .8-4.4 4.2 1.1 6L12 15.8 6.7 18.6l1.1-6L3.4 8.4l6-.8L12 2Z" fill="currentColor"/>
-        </svg>
+      <button class="icon-btn" id="dailyBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.6 5.6 6 .8-4.4 4.2 1.1 6L12 15.8 6.7 18.6l1.1-6L3.4 8.4l6-.8L12 2Z" fill="currentColor"/></svg>
       </button>
     </div>
   </div>
 
-  <!-- TOP STATS -->
   <div class="stats-bar">
     <div class="stat bricks">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-        <rect x="3" y="6" width="18" height="5" rx="1" fill="#FF6B1A"/>
-        <rect x="3" y="13" width="18" height="5" rx="1" fill="#FF6B1A"/>
-        <path d="M9 6v5M15 13v5" stroke="#141B29" stroke-width="1.5"/>
-      </svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="5" rx="1" fill="#FF6B1A"/><rect x="3" y="13" width="18" height="5" rx="1" fill="#FF6B1A"/><path d="M9 6v5M15 13v5" stroke="#141B29" stroke-width="1.5"/></svg>
       <span id="bricksVal">0</span>
     </div>
     <div class="stat money">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-        <rect x="3" y="6" width="18" height="12" rx="2" stroke="#2ECC71" stroke-width="2"/>
-        <circle cx="12" cy="12" r="3" stroke="#2ECC71" stroke-width="2"/>
-      </svg>
-      <span id="moneyVal">0</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#2ECC71" stroke-width="2"/><path d="M9 8h6M9 12h6M12 8v8" stroke="#2ECC71" stroke-width="2"/></svg>
+      <span id="moneyVal">0 ₽</span>
     </div>
     <div class="stat stars">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-        <path d="M12 3l2.6 5.6 6 .8-4.4 4.2 1.1 6L12 16.8 6.7 19.6l1.1-6L3.4 9.4l6-.8L12 3Z" fill="#FFD60A"/>
-      </svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3l2.6 5.6 6 .8-4.4 4.2 1.1 6L12 16.8 6.7 19.6l1.1-6L3.4 9.4l6-.8L12 3Z" fill="#FFD60A"/></svg>
       <span id="starsVal">0</span>
     </div>
   </div>
 
-  <!-- SCREENS -->
   <div class="screens" id="screens">
-
     <!-- BUILD -->
     <div class="screen active" id="screen-build">
-      <div class="building-wrap" id="buildingWrap">
-        <div class="stars-bg"></div>
-        <div class="floor-counter">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-            <path d="M4 13a8 8 0 0 1 16 0v1H4v-1Z" stroke="#FFD60A" stroke-width="2"/>
-            <path d="M3 17h18" stroke="#FFD60A" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          Этаж <span id="floorVal">1</span>
-        </div>
-        <div class="crane"></div>
-        <div class="building" id="building"></div>
+      <div class="building-wrap">
+        <div class="floor-counter">Этаж <span id="floorVal">1</span></div>
+        <div class="camera" id="camera"><div id="building"></div></div>
         <div class="skyline"></div>
       </div>
 
       <div class="click-area">
         <button id="buildBtn">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M14 3l7 7-3 3-7-7 3-3Z" fill="#FFD60A" stroke="#141B29" stroke-width="1.2" stroke-linejoin="round"/>
-            <path d="M11 6l7 7-9 9a2 2 0 0 1-3 0l-4-4a2 2 0 0 1 0-3l9-9Z" fill="#FF6B1A" stroke="#141B29" stroke-width="1.2" stroke-linejoin="round"/>
-            <path d="M6 17l2 2" stroke="#141B29" stroke-width="1.2" stroke-linecap="round"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none"><path d="M14 3l7 7-3 3-7-7 3-3Z" fill="#FFD60A" stroke="#141B29" stroke-width="1.2"/><path d="M11 6l7 7-9 9a2 2 0 0 1-3 0l-4-4a2 2 0 0 1 0-3l9-9Z" fill="#FF6B1A" stroke="#141B29" stroke-width="1.2"/></svg>
         </button>
-        <div class="energy-bar">
-          <div class="energy-fill" id="energyFill"></div>
+        <div class="energy-bar"><div class="energy-fill" id="energyFill"></div></div>
+        <div class="energy-text" style="font-size:12px; color:var(--gray)"><span id="energyVal">1000</span> / 1000 энергии</div>
+      </div>
+
+      <div class="section-title">Скупщик кирпичей</div>
+      <div class="card">
+        <div class="card-icon" style="background:#E67E22; color:white; font-size:24px;">🕵️</div>
+        <div class="card-body">
+          <div class="card-title">Барыга Валера</div>
+          <div class="card-sub">Скупает по <b id="bargerPrice">2</b> ₽/шт</div>
         </div>
-        <div class="energy-text">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-            <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" fill="#FFD60A"/>
-          </svg>
-          <span id="energyVal">1000</span> / 1000
+        <div class="btn-group">
+          <button class="card-btn green" onclick="sellBricks(100)">+100</button>
+          <button class="card-btn green" onclick="sellBricks(1000)">+1К</button>
+          <button class="card-btn yellow" onclick="sellBricks('all')">Всё</button>
         </div>
       </div>
 
       <div class="section-title">Пассивный доход</div>
       <div class="card">
-        <div class="card-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-            <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
+        <div class="card-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 3" stroke="currentColor" stroke-width="2"/></svg></div>
         <div class="card-body">
           <div class="card-title">Доход бригады</div>
           <div class="card-sub"><b id="passiveVal">0</b> кирпичей/сек</div>
@@ -838,372 +238,175 @@
 
     <!-- UPGRADES -->
     <div class="screen" id="screen-upgrades">
-      <div class="section-title">Апгрейды</div>
+      <div class="section-title">Апгрейды клика</div>
       <div id="upgradesList"></div>
-      <div class="section-title">Престиж</div>
+      
+      <div class="section-title">Автоматизация</div>
       <div class="card">
-        <div class="card-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M12 3v18M5 10l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
+        <div class="card-icon" style="background:var(--purple); color:white;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="2"/></svg></div>
         <div class="card-body">
-          <div class="card-title">Снос здания</div>
-          <div class="card-sub">Сбросить прогресс ради <b>постоянных бонусов</b></div>
+          <div class="card-title">Автокликер <span id="autoLvl" style="color:var(--orange)"></span></div>
+          <div class="card-sub">Кликает сам (1 раз/сек). Тратит энергию.</div>
         </div>
-        <button class="card-btn purple" onclick="prestige()">Снести</button>
+        <button class="card-btn purple" onclick="buyAutoClicker()" id="autoBtn">2000 ₽</button>
       </div>
     </div>
 
     <!-- LEADERBOARD -->
     <div class="screen" id="screen-leaderboard">
-      <div class="section-title">Топ бригад</div>
+      <div class="section-title">Топ игроков</div>
       <div id="lbList"></div>
-      <div class="section-title">Моя позиция</div>
-      <div id="myRank"></div>
     </div>
 
-    <!-- PROFILE -->
+    <!-- SETTINGS -->
     <div class="screen" id="screen-profile">
-      <div class="profile-head">
-        <div class="avatar" id="avatar">?</div>
-        <div class="profile-info">
-          <h3 id="profileName">Игрок</h3>
-          <p id="profileUser">@username</p>
-        </div>
+      <div class="section-title">Настройки</div>
+      <div class="setting-row">
+        <div class="setting-info"><h4>Звуки</h4></div>
+        <label class="switch"><input type="checkbox" id="soundToggle" onchange="toggleSound()"><span class="slider"></span></label>
+      </div>
+      <div class="setting-row" style="flex-direction: column; align-items: flex-start; gap: 12px;">
+        <div class="setting-info"><h4>Громкость: <span id="volVal">50</span>%</h4></div>
+        <input type="range" id="volumeSlider" min="0" max="100" value="50" oninput="changeVolume(this.value)">
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><h4>Вибрация</h4></div>
+        <label class="switch"><input type="checkbox" id="vibeToggle" checked onchange="toggleVibe()"><span class="slider"></span></label>
       </div>
 
-      <div class="profile-stats">
-        <div class="p-stat">
-          <div class="num" id="pTotalClicks">0</div>
-          <div class="lbl">Всего кликов</div>
+      <div class="section-title">Ссылки</div>
+      <a href="https://t.me/Mybriga" target="_blank" style="text-decoration:none; color:white;">
+        <div class="card">
+          <div class="card-icon" style="background: #2AABEE; color: white;"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg></div>
+          <div class="card-body"><div class="card-title">Телеграм-канал</div><div class="card-sub">@Mybriga</div></div>
         </div>
-        <div class="p-stat">
-          <div class="num" id="pFloor">1</div>
-          <div class="lbl">Этаж</div>
-        </div>
-        <div class="p-stat">
-          <div class="num" id="pRefs">0</div>
-          <div class="lbl">Рефералов</div>
-        </div>
-        <div class="p-stat">
-          <div class="num" id="pPower">1</div>
-          <div class="lbl">Сила клика</div>
-        </div>
-      </div>
-
-      <div class="ref-box">
-        <h4>Пригласи друзей</h4>
-        <p>Получай 10% от дохода каждого приглашённого друга. Бонус навсегда!</p>
-        <div class="ref-link">
-          <input id="refInput" readonly value="">
-          <button onclick="copyRef()">Копировать</button>
-        </div>
-      </div>
-
-      <div class="promo-box">
-        <h4>Промокод</h4>
-        <div class="promo-input">
-          <input id="promoInput" placeholder="ВВЕДИ КОД" maxlength="20">
-          <button onclick="activatePromo()">ОК</button>
-        </div>
-      </div>
-
+      </a>
       <div class="card">
-        <div class="card-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Z" stroke="currentColor" stroke-width="2"/>
-            <path d="M12 16v-4M12 8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="card-body">
-          <div class="card-title">Создатель игры</div>
-          <div class="card-sub"><b>@iticov</b></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M4 12h16M12 4v16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="card-body">
-          <div class="card-title">Версия</div>
-          <div class="card-sub">MY BRIGADA v1.0.0</div>
-        </div>
+        <div class="card-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Z" stroke="currentColor" stroke-width="2"/><path d="M12 16v-4M12 8h.01" stroke="currentColor" stroke-width="2"/></svg></div>
+        <div class="card-body"><div class="card-title">Создатель игры</div><div class="card-sub"><b>@iticov</b></div></div>
       </div>
     </div>
-
-    <!-- EVENT -->
-    <div class="screen" id="screen-event">
-      <div class="section-title">Активные ивенты</div>
-      <div id="eventList"></div>
-    </div>
-
   </div>
 
-  <!-- BOTTOM NAV -->
   <div class="nav">
-    <button class="nav-btn active" data-screen="build">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <path d="M4 13a8 8 0 0 1 16 0v1H4v-1Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-        <path d="M3 17h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        <path d="M9 13V7a3 3 0 0 1 6 0v6" stroke="currentColor" stroke-width="2"/>
-      </svg>
-      Стройка
-    </button>
-    <button class="nav-btn" data-screen="brigade">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="2"/>
-        <circle cx="17" cy="9" r="2.2" stroke="currentColor" stroke-width="2"/>
-        <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        <path d="M15 20c0-2.5 1.5-4.5 4-4.5s2 1 2 2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      Бригада
-    </button>
-    <button class="nav-btn" data-screen="upgrades">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <path d="M12 20V5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        <path d="M6 11l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Апгрейды
-    </button>
-    <button class="nav-btn" data-screen="leaderboard">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <path d="M7 4h10v4a5 5 0 0 1-10 0V4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-        <path d="M7 6H4v1a4 4 0 0 0 4 4M17 6h3v1a4 4 0 0 1-4 4" stroke="currentColor" stroke-width="2"/>
-        <path d="M12 13v5M8 21h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      Рейтинг
-    </button>
-    <button class="nav-btn" data-screen="profile">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
-        <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      Профиль
-    </button>
+    <button class="nav-btn active" data-screen="build"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 13a8 8 0 0 1 16 0v1H4v-1Z" stroke="currentColor" stroke-width="2"/><path d="M3 17h18" stroke="currentColor" stroke-width="2"/></svg>Стройка</button>
+    <button class="nav-btn" data-screen="brigade"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="9" r="2.2" stroke="currentColor" stroke-width="2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="2"/></svg>Бригада</button>
+    <button class="nav-btn" data-screen="upgrades"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 20V5" stroke="currentColor" stroke-width="2"/><path d="M6 11l6-6 6 6" stroke="currentColor" stroke-width="2"/></svg>Апгрейды</button>
+    <button class="nav-btn" data-screen="leaderboard"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z" stroke="currentColor" stroke-width="2"/><path d="M12 13v5M8 21h8" stroke="currentColor" stroke-width="2"/></svg>Топ</button>
+    <button class="nav-btn" data-screen="profile"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="currentColor" stroke-width="2"/></svg>Настройки</button>
   </div>
-
-  <!-- TOAST -->
-  <div id="toast"></div>
-
-  <!-- MODAL -->
-  <div class="modal-overlay" id="modal">
-    <div class="modal">
-      <div class="modal-icon" id="modalIcon">
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2l2.6 5.6 6 .8-4.4 4.2 1.1 6L12 15.8 6.7 18.6l1.1-6L3.4 8.4l6-.8L12 2Z" fill="currentColor"/>
-        </svg>
-      </div>
-      <h3 id="modalTitle">Награда!</h3>
-      <p id="modalText">Ты получил бонус.</p>
-      <button onclick="closeModal()">Забрать</button>
-    </div>
-  </div>
-
-  <!-- INSPECTOR -->
-  <div class="inspector-overlay" id="inspector">
-    <div class="inspector">
-      <h3>Инспектор на объекте!</h3>
-      <p>Проверка документов. Заплати штраф или дай взятку — иначе потеряешь часть кирпичей.</p>
-      <div class="btn-row">
-        <button class="bribe" onclick="bribeInspector()">Взятка (500)</button>
-        <button class="pay" onclick="payInspector()">Штраф (1000)</button>
-      </div>
-    </div>
-  </div>
-
 </div>
 
-<script>
-/* ============================================================
-   MY BRIGADA — клиентская логика
-   Создатель: @iticov
-   ============================================================ */
+<div id="toast"></div>
 
-const CREATOR = '@iticov';
+<script>
 const MAX_CLICKS_PER_SEC = 25;
 const ENERGY_MAX = 1000;
 const ENERGY_REGEN = 1;
 const CLICKS_TO_FLOOR = 500;
-const SAVE_KEY = 'mybrigada_save_v1';
+const SAVE_KEY = 'mybrigada_save_v3';
 
-/* ---------- UNITS ---------- */
 const UNITS = {
-  mason:     { name:'Каменщик',      baseCost:100,     income:1,    icon:'mason',     desc:'+1 кирпич/сек' },
-  mixer:     { name:'Бетономешалка', baseCost:1000,    income:8,    icon:'mixer',     desc:'+8 кирпичей/сек' },
-  crane:     { name:'Кран',          baseCost:12000,   income:50,   icon:'crane',     desc:'+50 кирпичей/сек' },
-  foreman:   { name:'Бригадир',      baseCost:80000,   income:250,  icon:'foreman',   desc:'+250 кирпичей/сек' },
-  engineer:  { name:'Инженер',       baseCost:500000,  income:1200, icon:'engineer',  desc:'+1200 кирпичей/сек' },
-  architect: { name:'Архитектор',    baseCost:3000000, income:6000, icon:'architect', desc:'+6000 кирпичей/сек' }
+  mason:     { name:'Каменщик',      baseCost:100,     income:1,    desc:'+1 кирпич/сек' },
+  mixer:     { name:'Бетономешалка', baseCost:1000,    income:8,    desc:'+8 кирпичей/сек' },
+  crane:     { name:'Кран',          baseCost:12000,   income:50,   desc:'+50 кирпичей/сек' },
+  foreman:   { name:'Бригадир',      baseCost:80000,   income:250,  desc:'+250 кирпичей/сек' }
 };
 
-/* ---------- UPGRADES ---------- */
 const UPGRADES = {
   hammer: { name:'Молоток+',   baseCost:500,    effect:1,  desc:'+1 к клику' },
   gloves: { name:'Перчатки',   baseCost:2500,   effect:2,  desc:'+2 к клику' },
   helmet: { name:'Каска',      baseCost:10000,  effect:5,  desc:'+5 к клику' },
-  boots:  { name:'Ботинки',    baseCost:50000,  effect:15, desc:'+15 к клику' },
-  drill:  { name:'Перфоратор', baseCost:250000, effect:50, desc:'+50 к клику' }
+  drill:  { name:'Перфоратор', baseCost:50000,  effect:15, desc:'+15 к клику' }
 };
 
-/* ---------- FLOORS ---------- */
-const FLOORS = [
-  { from:1,  to:10,  name:'Сарай',           color:'#8A94A6' },
-  { from:11, to:20,  name:'Хрущёвка',        color:'#FF6B1A' },
-  { from:21, to:40,  name:'Панелька',        color:'#FFD60A' },
-  { from:41, to:60,  name:'Бизнес-центр',    color:'#4ADEDE' },
-  { from:61, to:80,  name:'Небоскрёб',       color:'#A78BFA' },
-  { from:81, to:100, name:'MY BRIGADA Tower',color:'#FF3B6B' }
-];
-
-/* ---------- PROMOCODES ---------- */
-const PROMOCODES = {
-  MYBRIGADA: { bricks:1000, money:500,  energy:100, uses:999999 },
-  ITICOV:    { bricks:5000, money:2500, energy:500, uses:999999 },
-  START2024: { bricks:500,  money:200,  energy:50,  uses:999999 },
-  BRIGADA:   { bricks:2000, money:1000, energy:200, uses:999999 },
-  KEKS:      { bricks:777,  money:777,  energy:77,  uses:999999 }
-};
-
-/* ---------- EVENTS ---------- */
-const EVENTS = [
-  {
-    id:'double_income',
-    name:'Двойной доход',
-    desc:'Вся бригада работает в 2 раза быстрее! Успей построить больше этажей.',
-    multiplier:2,
-    endsAt: Date.now() + 24*60*60*1000,
-    icon:'fire'
-  },
-  {
-    id:'click_frenzy',
-    name:'Клик-безумие',
-    desc:'Каждый клик даёт ×3 кирпичей. Энергия не тратится!',
-    multiplier:3,
-    endsAt: Date.now() + 6*60*60*1000,
-    icon:'bolt'
-  }
-];
-
-/* ---------- STATE ---------- */
 let state = {
   telegramId: 0,
-  username: 'player',
   firstName: 'Игрок',
   bricks: 0,
   money: 0,
   stars: 0,
   floor: 1,
   energy: ENERGY_MAX,
-  clickPower: 1,
   totalClicks: 0,
-  referralCount: 0,
   units: {},
   upgrades: {},
+  autoClicker: 0, // Уровень автокликера
   lastEnergyUpdate: Date.now(),
   lastClickAt: 0,
-  soundOn: true,
-  dailyClaimed: [],
-  lastDailyDay: -1,
-  prestigeLevel: 0,
-  eventBonus: { double_income:false, click_frenzy:false }
+  isSubscribed: false,
+  settings: { sound: true, volume: 0.5, vibration: true },
+  bargerPrice: 2 // Текущая цена барыги
 };
 
-/* ---------- SAVE / LOAD ---------- */
-function save() {
-  try {
-    const toSave = {
-      telegramId: state.telegramId,
-      username: state.username,
-      firstName: state.firstName,
-      bricks: state.bricks,
-      money: state.money,
-      stars: state.stars,
-      floor: state.floor,
-      energy: state.energy,
-      clickPower: state.clickPower,
-      totalClicks: state.totalClicks,
-      referralCount: state.referralCount,
-      units: state.units,
-      upgrades: state.upgrades,
-      lastEnergyUpdate: state.lastEnergyUpdate,
-      soundOn: state.soundOn,
-      dailyClaimed: state.dailyClaimed,
-      lastDailyDay: state.lastDailyDay,
-      prestigeLevel: state.prestigeLevel
-    };
-    localStorage.setItem(SAVE_KEY, JSON.stringify(toSave));
-  } catch(e) { console.warn('save fail', e); }
+// ---------------- ИНИЦИАЛИЗАЦИЯ ----------------
+function initTelegram() {
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+    try { tg.setHeaderColor('#141B29'); } catch(e){}
+    const u = tg.initDataUnsafe?.user;
+    if (u) {
+      state.telegramId = u.id;
+      state.firstName = u.first_name || 'Игрок';
+    }
+  }
 }
 
 function load() {
   try {
     const raw = localStorage.getItem(SAVE_KEY);
-    if (!raw) return;
-    const data = JSON.parse(raw);
-    Object.assign(state, data);
-    // регенерация энергии за оффлайн
-    const elapsed = Math.floor((Date.now() - (state.lastEnergyUpdate || Date.now())) / 1000);
-    if (elapsed > 0) {
-      state.energy = Math.min(ENERGY_MAX, state.energy + elapsed * ENERGY_REGEN);
+    if (raw) {
+      const data = JSON.parse(raw);
+      Object.assign(state, data);
+      if(!state.settings) state.settings = { sound: true, volume: 0.5, vibration: true };
+      const elapsed = Math.floor((Date.now() - (state.lastEnergyUpdate || Date.now())) / 1000);
+      if (elapsed > 0) state.energy = Math.min(ENERGY_MAX, state.energy + elapsed * ENERGY_REGEN);
+      state.lastEnergyUpdate = Date.now();
+      // Случайная цена барыги при загрузке
+      state.bargerPrice = Math.floor(Math.random() * 4) + 1; // 1-4
     }
-    state.lastEnergyUpdate = Date.now();
-  } catch(e) { console.warn('load fail', e); }
+  } catch(e) {}
 }
 
-/* ---------- TELEGRAM ---------- */
-function initTelegram() {
-  const tg = window.Telegram?.WebApp;
-  if (!tg) {
-    // fallback для браузера
-    state.telegramId = 0;
-    state.username = 'demo';
-    state.firstName = 'Демо';
-    return;
-  }
-  tg.ready();
-  tg.expand();
-  try { tg.setHeaderColor('#141B29'); } catch(e){}
-  try { tg.setBackgroundColor('#141B29'); } catch(e){}
-  const u = tg.initDataUnsafe?.user;
-  if (u) {
-    state.telegramId = u.id;
-    state.username = u.username || 'player';
-    state.firstName = u.first_name || 'Игрок';
-  }
-  // рефералка из start_param
-  const sp = tg.initDataUnsafe?.start_param;
-  if (sp && sp.startsWith('ref_')) {
-    const refId = Number(sp.slice(4));
-    if (refId && refId !== state.telegramId) {
-      localStorage.setItem('mybrigada_referrer', refId);
-    }
-  }
+function save() {
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch(e) {}
 }
 
-/* ---------- AUDIO ---------- */
+// ---------------- ПОДПИСКА ----------------
+function checkSubscription() {
+  state.isSubscribed = true;
+  save();
+  document.getElementById('subscribe-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  showToast('Добро пожаловать в бригаду!', 'success');
+  renderAll();
+}
+
+// ---------------- НАСТРОЙКИ ----------------
 let audioCtx = null;
-function beep(freq = 440, dur = 0.05, type = 'sine', vol = 0.05) {
-  if (!state.soundOn) return;
+function playSound(freq = 440, dur = 0.05) {
+  if (!state.settings.sound || state.settings.volume <= 0) return;
   try {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const o = audioCtx.createOscillator();
     const g = audioCtx.createGain();
-    o.type = type;
+    o.type = 'square';
     o.frequency.value = freq;
-    g.gain.value = vol;
-    o.connect(g);
-    g.connect(audioCtx.destination);
-    o.start();
-    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
+    g.gain.value = 0.05 * state.settings.volume;
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(); g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
     o.stop(audioCtx.currentTime + dur);
   } catch(e){}
 }
 
-/* ---------- HELPERS ---------- */
+function toggleSound() { state.settings.sound = document.getElementById('soundToggle').checked; save(); }
+function changeVolume(val) { document.getElementById('volVal').textContent = val; state.settings.volume = val / 100; save(); }
+function toggleVibe() { state.settings.vibration = document.getElementById('vibeToggle').checked; save(); }
+function haptic() { if (state.settings.vibration) { try { window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light'); } catch(e){} } }
+
+// ---------------- ЛОГИКА ----------------
 function fmt(n) {
   n = Math.floor(n);
   if (n >= 1e9) return (n/1e9).toFixed(1)+'B';
@@ -1212,164 +415,182 @@ function fmt(n) {
   return String(n);
 }
 
-function floorInfo(floor) {
-  return FLOORS.find(f => floor >= f.from && floor <= f.to) || FLOORS[0];
-}
-
 function calcIncome() {
   let income = 0;
-  for (const [uid, lvl] of Object.entries(state.units)) {
-    const def = UNITS[uid];
-    if (def) income += def.income * lvl;
-  }
-  if (state.eventBonus.double_income) income *= 2;
-  income *= (1 + state.prestigeLevel * 0.1);
+  for (const [uid, lvl] of Object.entries(state.units)) { if (UNITS[uid]) income += UNITS[uid].income * lvl; }
   return income;
 }
 
 function calcClickPower() {
   let power = 1;
-  for (const [uid, lvl] of Object.entries(state.upgrades)) {
-    const def = UPGRADES[uid];
-    if (def) power += def.effect * lvl;
-  }
-  if (state.eventBonus.click_frenzy) power *= 3;
+  for (const [uid, lvl] of Object.entries(state.upgrades)) { if (UPGRADES[uid]) power += UPGRADES[uid].effect * lvl; }
   return power;
 }
 
-function toast(msg, type = '') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'show ' + type;
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.className = '', 2200);
-}
-
-function showModal(title, text, icon = 'star') {
-  document.getElementById('modalTitle').textContent = title;
-  document.getElementById('modalText').textContent = text;
-  const iconEl = document.getElementById('modalIcon');
-  if (icon === 'star') {
-    iconEl.innerHTML = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.6 5.6 6 .8-4.4 4.2 1.1 6L12 15.8 6.7 18.6l1.1-6L3.4 8.4l6-.8L12 2Z" fill="currentColor"/></svg>';
-  } else if (icon === 'gift') {
-    iconEl.innerHTML = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 8v13" stroke="currentColor" stroke-width="2"/><path d="M12 8c-2 0-4-1-4-3s2-2 3 0 1 3 1 3Zm0 0c2 0 4-1 4-3s-2-2-3 0-1 3-1 3Z" stroke="currentColor" stroke-width="2"/></svg>';
-  } else if (icon === 'error') {
-    iconEl.innerHTML = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 7v6M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
-    iconEl.style.background = 'rgba(255,77,77,.15)';
-    iconEl.style.color = '#FF4D4D';
-  } else {
-    iconEl.innerHTML = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.6 5.6 6 .8-4.4 4.2 1.1 6L12 15.8 6.7 18.6l1.1-6L3.4 8.4l6-.8L12 2Z" fill="currentColor"/></svg>';
-    iconEl.style.background = 'rgba(255,107,26,.15)';
-    iconEl.style.color = '#FF6B1A';
+function renderBuilding() {
+  const b = document.getElementById('building');
+  const cam = document.getElementById('camera');
+  const visible = Math.min(50, state.floor);
+  if (b.children.length !== visible) {
+    b.innerHTML = '';
+    for (let i = 0; i < visible; i++) { const f = document.createElement('div'); f.className = 'floor'; b.appendChild(f); }
   }
-  document.getElementById('modal').classList.add('show');
+  document.getElementById('floorVal').textContent = state.floor;
+  document.getElementById('passiveVal').textContent = fmt(calcIncome());
+  const floorsAboveBase = Math.max(0, visible - 8);
+  cam.style.transform = `translateY(${floorsAboveBase * 14}px)`;
 }
 
-function closeModal() {
-  document.getElementById('modal').classList.remove('show');
+// Общая функция добавления кирпичей (для ручного и авто-клика)
+function addBricks(amount, isCrit = false) {
+  state.bricks += amount;
+  state.totalClicks += 1;
+  
+  const newFloor = Math.floor(state.totalClicks / CLICKS_TO_FLOOR) + 1;
+  if (newFloor > state.floor) {
+    state.floor = newFloor;
+    playSound(880, 0.15);
+    for(let i=0; i<15; i++){
+        let c = document.createElement('div'); c.className = 'confetti';
+        c.style.left = Math.random()*100+'vw'; c.style.background = ['#FF6B1A','#FFD60A','#2ECC71'][Math.floor(Math.random()*3)];
+        document.body.appendChild(c); setTimeout(()=>c.remove(), 2000);
+    }
+  }
+  
+  renderTop();
+  renderBuilding();
+  save();
 }
 
-function confetti() {
-  const colors = ['#FF6B1A','#FFD60A','#2ECC71','#4ADEDE','#A78BFA','#FF3B6B'];
-  for (let i = 0; i < 40; i++) {
-    const c = document.createElement('div');
-    c.className = 'confetti';
-    c.style.left = Math.random()*100 + 'vw';
-    c.style.top = '-10px';
-    c.style.background = colors[Math.floor(Math.random()*colors.length)];
-    c.style.animationDuration = (1.5 + Math.random()*1.5) + 's';
-    c.style.animationDelay = (Math.random()*0.3) + 's';
-    document.body.appendChild(c);
-    setTimeout(() => c.remove(), 3000);
+function doClick(e) {
+  const now = Date.now();
+  if (now - state.lastClickAt < 1000 / MAX_CLICKS_PER_SEC) return;
+  state.lastClickAt = now;
+
+  if (state.energy <= 0) { showToast('Энергия кончилась!', 'error'); return; }
+
+  const isCrit = Math.random() < 0.05;
+  let gained = calcClickPower();
+  if (isCrit) gained *= 5;
+
+  state.energy -= 1;
+  addBricks(gained, isCrit);
+
+  if (e) {
+    const rect = document.getElementById('buildBtn').getBoundingClientRect();
+    const fx = document.createElement('div'); fx.className = 'float-text';
+    fx.textContent = '+' + fmt(gained) + (isCrit ? ' КРИТ!' : '');
+    fx.style.left = (rect.left + rect.width/2 - 30) + 'px'; fx.style.top = (rect.top + rect.height/2 - 20) + 'px';
+    if (isCrit) fx.style.color = '#FF3B6B';
+    document.body.appendChild(fx); setTimeout(() => fx.remove(), 800);
+    playSound(isCrit ? 1000 : 400, 0.04);
+    haptic();
   }
 }
 
-/* ---------- RENDER ---------- */
+// Продажа барыге
+function sellBricks(amount) {
+  if (state.bricks <= 0) { showToast('Нет кирпичей для продажи!', 'error'); return; }
+  let toSell = amount === 'all' ? state.bricks : Math.min(state.bricks, amount);
+  if (toSell <= 0) return;
+  
+  const earned = toSell * state.bargerPrice;
+  state.bricks -= toSell;
+  state.money += earned;
+  
+  // Барыга меняет цену после сделки (от 1 до 4)
+  state.bargerPrice = Math.floor(Math.random() * 4) + 1;
+  document.getElementById('bargerPrice').textContent = state.bargerPrice;
+  
+  playSound(800, 0.1);
+  showToast(`Продано ${fmt(toSell)} шт. за ${fmt(earned)} ₽`, 'success');
+  renderTop();
+  renderBuilding();
+  save();
+}
+
+function buyUnit(uid) {
+  const def = UNITS[uid]; if (!def) return;
+  const level = state.units[uid] || 0;
+  const cost = Math.floor(def.baseCost * Math.pow(1.15, level));
+  if (state.money < cost) { showToast('Не хватает рублей!', 'error'); return; }
+  state.money -= cost; state.units[uid] = level + 1;
+  playSound(600, 0.08); showToast(`${def.name} нанят!`, 'success');
+  renderTop(); renderUnits(); renderBuilding(); save();
+}
+
+function buyUpgrade(uid) {
+  const def = UPGRADES[uid]; if (!def) return;
+  const level = state.upgrades[uid] || 0;
+  const cost = Math.floor(def.baseCost * Math.pow(1.2, level));
+  if (state.money < cost) { showToast('Не хватает рублей!', 'error'); return; }
+  state.money -= cost; state.upgrades[uid] = level + 1;
+  playSound(700, 0.08); showToast(`${def.name} улучшен!`, 'success');
+  renderTop(); renderUpgrades(); save();
+}
+
+// АВТОКЛИКЕР
+function buyAutoClicker() {
+  const basePrice = 2000;
+  const currentLevel = state.autoClicker || 0;
+  const cost = basePrice * (currentLevel + 1); // 2000, 4000, 6000...
+  
+  if (state.money < cost) { showToast('Не хватает рублей!', 'error'); return; }
+  state.money -= cost;
+  state.autoClicker = currentLevel + 1;
+  
+  playSound(900, 0.15);
+  showToast(`Автокликер улучшен! Ур. ${state.autoClicker}`, 'success');
+  renderTop(); renderUpgrades(); save();
+}
+
+// ---------------- ОТРИСОВКА ----------------
 function renderTop() {
   document.getElementById('bricksVal').textContent = fmt(state.bricks);
-  document.getElementById('moneyVal').textContent = fmt(state.money);
-  document.getElementById('starsVal').textContent = fmt(state.stars);
+  document.getElementById('moneyVal').textContent = fmt(state.money) + ' ₽';
   document.getElementById('energyVal').textContent = Math.floor(state.energy);
   const pct = Math.max(0, Math.min(100, (state.energy / ENERGY_MAX) * 100));
   document.getElementById('energyFill').style.width = pct + '%';
 }
 
-function renderBuilding() {
-  const b = document.getElementById('building');
-  const visibleFloors = Math.min(20, state.floor);
-  b.innerHTML = '';
-  const info = floorInfo(state.floor);
-  for (let i = 0; i < visibleFloors; i++) {
-    const f = document.createElement('div');
-    f.className = 'floor';
-    f.style.background = `linear-gradient(180deg, ${info.color}, ${info.color}99)`;
-    b.appendChild(f);
-  }
-  document.getElementById('floorVal').textContent = state.floor;
-  document.getElementById('passiveVal').textContent = fmt(calcIncome());
-}
-
 function renderUnits() {
-  const list = document.getElementById('unitsList');
-  list.innerHTML = '';
+  const list = document.getElementById('unitsList'); list.innerHTML = '';
   for (const [uid, def] of Object.entries(UNITS)) {
     const level = state.units[uid] || 0;
     const cost = Math.floor(def.baseCost * Math.pow(1.15, level));
     const canBuy = state.money >= cost;
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="card-icon">${unitIcon(uid)}</div>
-      <div class="card-body">
-        <div class="card-title">${def.name} ${level > 0 ? `<span style="color:var(--orange)">ур.${level}</span>` : ''}</div>
-        <div class="card-sub">${def.desc}${level > 0 ? ` · всего <b>${fmt(def.income*level)}</b>/сек` : ''}</div>
+    list.innerHTML += `
+      <div class="card">
+        <div class="card-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="3" stroke="currentColor" stroke-width="2"/><path d="M6 21v-4a6 6 0 0 1 12 0v4" stroke="currentColor" stroke-width="2"/></svg></div>
+        <div class="card-body"><div class="card-title">${def.name} ${level > 0 ? `<span style="color:var(--orange)">ур.${level}</span>` : ''}</div><div class="card-sub">${def.desc}</div></div>
+        <button class="card-btn" ${canBuy ? '' : 'disabled'} onclick="buyUnit('${uid}')">${fmt(cost)} ₽</button>
       </div>
-      <button class="card-btn ${canBuy ? '' : ''}" ${canBuy ? '' : 'disabled'} onclick="buyUnit('${uid}')">
-        ${fmt(cost)} ₽
-      </button>
     `;
-    list.appendChild(card);
   }
 }
 
-function unitIcon(uid) {
-  const icons = {
-    mason: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="3" stroke="currentColor" stroke-width="2"/><path d="M6 21v-4a6 6 0 0 1 12 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="15" y="10" width="6" height="3" rx="0.5" fill="#FF6B1A"/></svg>`,
-    mixer: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="7" cy="18" r="2" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="18" r="2" stroke="currentColor" stroke-width="2"/><path d="M3 14h9l5-6 3 3-4 3" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`,
-    crane: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 21V4h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 4l8 4M16 4v6" stroke="currentColor" stroke-width="2"/><rect x="14" y="12" width="4" height="4" rx="1" fill="#FFD60A"/><circle cx="16" cy="18" r="1.5" stroke="currentColor" stroke-width="1.5"/></svg>`,
-    foreman: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="3" stroke="currentColor" stroke-width="2"/><path d="M5 21v-3a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v3" stroke="currentColor" stroke-width="2"/><path d="M9 7h6" stroke="currentColor" stroke-width="2"/></svg>`,
-    engineer: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
-    architect: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 20V8l8-6 8 6v12" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 20v-6h6v6" stroke="currentColor" stroke-width="2"/></svg>`
-  };
-  return icons[uid] || '';
-}
-
 function renderUpgrades() {
-  const list = document.getElementById('upgradesList');
-  list.innerHTML = '';
+  const list = document.getElementById('upgradesList'); list.innerHTML = '';
   for (const [uid, def] of Object.entries(UPGRADES)) {
     const level = state.upgrades[uid] || 0;
     const cost = Math.floor(def.baseCost * Math.pow(1.2, level));
     const canBuy = state.money >= cost;
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="card-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M12 20V5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <path d="M6 11l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+    list.innerHTML += `
+      <div class="card">
+        <div class="card-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 20V5" stroke="currentColor" stroke-width="2"/><path d="M6 11l6-6 6 6" stroke="currentColor" stroke-width="2"/></svg></div>
+        <div class="card-body"><div class="card-title">${def.name} ${level > 0 ? `<span style="color:var(--orange)">ур.${level}</span>` : ''}</div><div class="card-sub">${def.desc}</div></div>
+        <button class="card-btn green" ${canBuy ? '' : 'disabled'} onclick="buyUpgrade('${uid}')">${fmt(cost)} ₽</button>
       </div>
-      <div class="card-body">
-        <div class="card-title">${def.name} ${level > 0 ? `<span style="color:var(--orange)">ур.${level}</span>` : ''}</div>
-        <div class="card-sub">${def.desc}</div>
-      </div>
-      <button class="card-btn ${canBuy ? 'green' : ''}" ${canBuy ? '' : 'disabled'} onclick="buyUpgrade('${uid}')">
-        ${fmt(cost)} ₽
-      </button>
     `;
-    list.appendChild(card);
   }
+  
+  // Обновление кнопки автокликера
+  const autoLvl = state.autoClicker || 0;
+  document.getElementById('autoLvl').textContent = autoLvl > 0 ? `ур.${autoLvl}` : '';
+  const cost = 2000 * (autoLvl + 1);
+  const btn = document.getElementById('autoBtn');
+  btn.textContent = fmt(cost) + ' ₽';
+  btn.disabled = state.money < cost;
 }
 
 function renderLeaderboard() {
@@ -1377,355 +598,56 @@ function renderLeaderboard() {
   const fake = [
     { name:'Бетонный Король', score: 152000 },
     { name:'Прораб 2000',     score: 98000 },
-    { name:'Каска',           score: 75400 },
-    { name:'Арматура',        score: 51200 },
-    { name:'Кирпич',          score: 33000 },
-    { name:'Мастер',          score: 21000 },
-    { name:'Молоток',         score: 12500 }
-  ];
-  const my = { name: state.firstName || 'Ты', score: Math.floor(state.totalClicks), me: true };
-  const all = [...fake, my].sort((a,b) => b.score - a.score);
+    { name: state.firstName || 'Ты', score: state.totalClicks, me: true }
+  ].sort((a,b) => b.score - a.score);
   list.innerHTML = '';
-  all.forEach((p, i) => {
-    const row = document.createElement('div');
-    row.className = 'lb-row' + (p.me ? ' me' : '');
-    let rankClass = '';
-    if (i === 0) rankClass = 'gold';
-    else if (i === 1) rankClass = 'silver';
-    else if (i === 2) rankClass = 'bronze';
-    row.innerHTML = `
-      <div class="lb-rank ${rankClass}">${i+1}</div>
-      <div class="lb-name">${p.name}${p.me ? ' (ты)' : ''}</div>
-      <div class="lb-score">${fmt(p.score)}</div>
-    `;
-    list.appendChild(row);
-  });
-  document.getElementById('myRank').innerHTML = '';
-}
-
-function renderProfile() {
-  document.getElementById('profileName').textContent = state.firstName || 'Игрок';
-  document.getElementById('profileUser').textContent = '@' + (state.username || 'player');
-  document.getElementById('avatar').textContent = (state.firstName || '?')[0].toUpperCase();
-  document.getElementById('pTotalClicks').textContent = fmt(state.totalClicks);
-  document.getElementById('pFloor').textContent = state.floor;
-  document.getElementById('pRefs').textContent = state.referralCount;
-  document.getElementById('pPower').textContent = fmt(calcClickPower());
-  const refLink = `https://t.me/MyBrigadaBot?start=ref_${state.telegramId}`;
-  document.getElementById('refInput').value = refLink;
-}
-
-function renderEvents() {
-  const list = document.getElementById('eventList');
-  list.innerHTML = '';
-  const now = Date.now();
-  EVENTS.forEach(ev => {
-    const left = Math.max(0, ev.endsAt - now);
-    const hours = Math.floor(left / 3600000);
-    const mins = Math.floor((left % 3600000) / 60000);
-    const active = ev.id === 'double_income' ? state.eventBonus.double_income : state.eventBonus.click_frenzy;
-    const banner = document.createElement('div');
-    banner.className = 'event-banner';
-    banner.innerHTML = `
-      <div class="event-title">${ev.name}</div>
-      <div class="event-desc">${ev.desc}</div>
-      <div class="event-progress"><div style="width:${active ? 100 : 0}%"></div></div>
-      <div class="event-meta">
-        <span>${active ? 'Активен' : 'Не активирован'}</span>
-        <span>осталось ${hours}ч ${mins}м</span>
+  fake.forEach((p, i) => {
+    list.innerHTML += `
+      <div class="card" style="${p.me ? 'border-color:var(--orange); background:rgba(255,107,26,.1)' : ''}">
+        <div class="lb-rank" style="width:28px;height:28px;background:${i===0?'gold':i===1?'silver':'var(--dark-2)'};border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;color:${i<2?'#000':'#fff'}">${i+1}</div>
+        <div class="card-body"><div class="card-title">${p.name}</div></div>
+        <div style="color:var(--orange);font-weight:800">${fmt(p.score)}</div>
       </div>
-      <button class="card-btn ${active ? 'green' : 'yellow'}" onclick="toggleEvent('${ev.id}')">
-        ${active ? 'Выключить' : 'Активировать бесплатно'}
-      </button>
     `;
-    list.appendChild(banner);
   });
 }
 
 function renderAll() {
-  renderTop();
-  renderBuilding();
-  renderUnits();
-  renderUpgrades();
-  renderLeaderboard();
-  renderProfile();
-  renderEvents();
+  renderTop(); renderBuilding(); renderUnits(); renderUpgrades(); renderLeaderboard();
+  document.getElementById('soundToggle').checked = state.settings.sound;
+  document.getElementById('vibeToggle').checked = state.settings.vibration;
+  document.getElementById('volumeSlider').value = state.settings.volume * 100;
+  document.getElementById('volVal').textContent = state.settings.volume * 100;
+  document.getElementById('bargerPrice').textContent = state.bargerPrice;
 }
 
-/* ---------- ACTIONS ---------- */
-function doClick(e) {
-  const now = Date.now();
-  if (now - state.lastClickAt < 1000 / MAX_CLICKS_PER_SEC) return;
-  state.lastClickAt = now;
-
-  if (state.energy <= 0) {
-    toast('Энергия кончилась! Подожди или купи в магазине', 'error');
-    return;
-  }
-
-  const isCrit = Math.random() < 0.05;
-  let gained = calcClickPower();
-  if (isCrit) gained *= 5;
-
-  state.bricks += gained;
-  state.totalClicks += 1;
-  if (!state.eventBonus.click_frenzy) state.energy -= 1;
-
-  // этаж
-  const newFloor = Math.floor(state.totalClicks / CLICKS_TO_FLOOR) + 1;
-  if (newFloor > state.floor) {
-    state.floor = newFloor;
-    beep(880, 0.15, 'triangle', 0.08);
-    confetti();
-    const info = floorInfo(state.floor);
-    toast(`Новый этаж ${state.floor}: ${info.name}!`, 'success');
-  }
-
-  // floating text
-  const btn = document.getElementById('buildBtn');
-  const rect = btn.getBoundingClientRect();
-  const fx = document.createElement('div');
-  fx.className = 'float-text';
-  fx.textContent = '+' + fmt(gained) + (isCrit ? ' КРИТ!' : '');
-  fx.style.left = (rect.left + rect.width/2 - 30) + 'px';
-  fx.style.top = (rect.top + rect.height/2 - 20) + 'px';
-  if (isCrit) fx.style.color = '#FF3B6B';
-  document.body.appendChild(fx);
-  setTimeout(() => fx.remove(), 800);
-
-  beep(isCrit ? 880 : 440, 0.04, 'square', isCrit ? 0.08 : 0.04);
-
-  // haptic
-  try { window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light'); } catch(e){}
-
-  renderTop();
-  renderBuilding();
-  save();
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast'); t.textContent = msg; t.className = 'show ' + type;
+  clearTimeout(t._timer); t._timer = setTimeout(() => t.className = '', 2200);
 }
 
-function buyUnit(uid) {
-  const def = UNITS[uid];
-  if (!def) return;
-  const level = state.units[uid] || 0;
-  const cost = Math.floor(def.baseCost * Math.pow(1.15, level));
-  if (state.money < cost) { toast('Не хватает денег', 'error'); return; }
-  state.money -= cost;
-  state.units[uid] = level + 1;
-  beep(600, 0.08, 'sine', 0.06);
-  toast(`${def.name} нанят!`, 'success');
-  renderTop();
-  renderUnits();
-  renderBuilding();
-  save();
-}
-
-function buyUpgrade(uid) {
-  const def = UPGRADES[uid];
-  if (!def) return;
-  const level = state.upgrades[uid] || 0;
-  const cost = Math.floor(def.baseCost * Math.pow(1.2, level));
-  if (state.money < cost) { toast('Не хватает денег', 'error'); return; }
-  state.money -= cost;
-  state.upgrades[uid] = level + 1;
-  beep(700, 0.08, 'sine', 0.06);
-  toast(`${def.name} улучшен!`, 'success');
-  renderTop();
-  renderUpgrades();
-  renderProfile();
-  save();
-}
-
-function prestige() {
-  if (state.floor < 20) { toast('Нужен минимум 20 этаж', 'error'); return; }
-  if (!confirm('Снести здание? Получишь +10% к доходу навсегда, но потеряешь прогресс.')) return;
-  state.prestigeLevel += 1;
-  state.floor = 1;
-  state.totalClicks = 0;
-  state.units = {};
-  state.upgrades = {};
-  state.bricks = 0;
-  state.money = 0;
-  state.energy = ENERGY_MAX;
-  confetti();
-  toast(`Престиж ${state.prestigeLevel}! +${state.prestigeLevel*10}% к доходу`, 'success');
-  renderAll();
-  save();
-}
-
-function toggleEvent(id) {
-  if (id === 'double_income') state.eventBonus.double_income = !state.eventBonus.double_income;
-  if (id === 'click_frenzy') state.eventBonus.click_frenzy = !state.eventBonus.click_frenzy;
-  beep(500, 0.06, 'triangle', 0.05);
-  renderEvents();
-  renderTop();
-  renderBuilding();
-  save();
-}
-
-function activatePromo() {
-  const input = document.getElementById('promoInput');
-  const code = input.value.trim().toUpperCase();
-  if (!code) return;
-  const promo = PROMOCODES[code];
-  if (!promo) { toast('Промокод не найден', 'error'); return; }
-  const usedKey = 'mybrigada_promo_' + code;
-  if (localStorage.getItem(usedKey)) { toast('Ты уже использовал этот код', 'error'); return; }
-  state.bricks += promo.bricks;
-  state.money += promo.money;
-  state.energy = Math.min(ENERGY_MAX, state.energy + promo.energy);
-  localStorage.setItem(usedKey, '1');
-  input.value = '';
-  confetti();
-  beep(900, 0.15, 'sine', 0.1);
-  showModal('Промокод активирован!',
-    `+${fmt(promo.bricks)} кирпичей, +${fmt(promo.money)} денег, +${promo.energy} энергии`,
-    'gift');
-  renderAll();
-  save();
-}
-
-function copyRef() {
-  const input = document.getElementById('refInput');
-  input.select();
-  input.setSelectionRange(0, 99999);
-  try {
-    navigator.clipboard.writeText(input.value);
-    toast('Ссылка скопирована!', 'success');
-  } catch(e) {
-    document.execCommand('copy');
-    toast('Ссылка скопирована!', 'success');
-  }
-  beep(600, 0.05);
-}
-
-/* ---------- DAILY REWARD ---------- */
-const DAILY_REWARDS = [
-  { bricks:500,  money:100,  energy:50 },
-  { bricks:1000, money:300,  energy:100 },
-  { bricks:2000, money:500,  energy:150 },
-  { bricks:3000, money:1000, energy:200 },
-  { bricks:5000, money:2000, energy:300 },
-  { bricks:8000, money:3000, energy:400 },
-  { bricks:15000,money:5000, energy:500 }
-];
-
-function getDayIndex() {
-  return Math.floor(Date.now() / (24*60*60*1000));
-}
-
-function openDaily() {
-  const today = getDayIndex();
-  const claimedToday = state.lastDailyDay === today;
-  const dayInStreak = claimedToday ? (state.dailyClaimed.length % 7) : (state.dailyClaimed.length % 7);
-  let html = '<div class="daily-rewards">';
-  for (let i = 0; i < 7; i++) {
-    const r = DAILY_REWARDS[i];
-    const isClaimed = i < (state.dailyClaimed.length % 7);
-    const isToday = !claimedToday && i === (state.dailyClaimed.length % 7);
-    html += `
-      <div class="day ${isClaimed?'claimed':''} ${isToday?'today':''}">
-        <div class="d-num">Д${i+1}</div>
-        <div class="d-val">+${fmt(r.bricks)}</div>
-      </div>
-    `;
-  }
-  html += '</div>';
-  const reward = DAILY_REWARDS[state.dailyClaimed.length % 7];
-  if (claimedToday) {
-    showModal('Уже получено', 'Возвращайся завтра за следующей наградой!', 'star');
-  } else {
-    document.getElementById('modalTitle').textContent = 'Ежедневная награда!';
-    document.getElementById('modalText').innerHTML = `${html}Награда дня: +${fmt(reward.bricks)} кирпичей, +${fmt(reward.money)} денег, +${reward.energy} энергии`;
-    document.getElementById('modal').classList.add('show');
-    const btn = document.querySelector('#modal button');
-    btn.onclick = () => claimDaily(reward);
-  }
-}
-
-function claimDaily(reward) {
-  state.bricks += reward.bricks;
-  state.money += reward.money;
-  state.energy = Math.min(ENERGY_MAX, state.energy + reward.energy);
-  state.dailyClaimed.push(getDayIndex());
-  state.lastDailyDay = getDayIndex();
-  confetti();
-  beep(900, 0.15, 'sine', 0.1);
-  closeModal();
-  document.querySelector('#modal button').onclick = closeModal;
-  toast(`+${fmt(reward.bricks)} кирпичей!`, 'success');
-  renderAll();
-  save();
-}
-
-/* ---------- INSPECTOR ---------- */
-let inspectorTimer = null;
-function scheduleInspector() {
-  if (inspectorTimer) clearTimeout(inspectorTimer);
-  const delay = 60000 + Math.random() * 120000; // 1-3 мин
-  inspectorTimer = setTimeout(() => {
-    if (state.money >= 500 || state.bricks >= 500) {
-      document.getElementById('inspector').classList.add('show');
-    }
-    scheduleInspector();
-  }, delay);
-}
-
-function bribeInspector() {
-  if (state.money < 500) { toast('Не хватает денег на взятку', 'error'); return; }
-  state.money -= 500;
-  document.getElementById('inspector').classList.remove('show');
-  toast('Инспектор доволен. Продолжай стройку!', 'success');
-  renderTop();
-  save();
-}
-
-function payInspector() {
-  const loss = Math.min(state.bricks, 1000);
-  state.bricks -= loss;
-  document.getElementById('inspector').classList.remove('show');
-  toast(`Штраф оплачен. Потеряно ${fmt(loss)} кирпичей`, 'error');
-  renderTop();
-  save();
-}
-
-/* ---------- NAV ---------- */
 function switchScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const el = document.getElementById('screen-' + name);
-  if (el) el.classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.screen === name);
-  });
-  try { window.Telegram?.WebApp?.HapticFeedback?.selectionChanged(); } catch(e){}
+  const el = document.getElementById('screen-' + name); if (el) el.classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.screen === name));
+  haptic();
 }
 
-/* ---------- INIT ---------- */
-function init() {
+// ---------------- СТАРТ И ЦИКЛЫ ----------------
+window.addEventListener('DOMContentLoaded', () => {
   initTelegram();
   load();
-  renderAll();
 
-  // звук
-  document.getElementById('soundBtn').addEventListener('click', () => {
-    state.soundOn = !state.soundOn;
-    document.getElementById('soundBtn').classList.toggle('active', state.soundOn);
-    if (state.soundOn) beep(700, 0.06);
-    save();
-  });
-  if (state.soundOn) document.getElementById('soundBtn').classList.add('active');
+  if (state.isSubscribed) {
+    document.getElementById('subscribe-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    renderAll();
+  }
 
-  // клик
   document.getElementById('buildBtn').addEventListener('click', doClick);
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', () => switchScreen(btn.dataset.screen)));
 
-  // ежедневка
-  document.getElementById('dailyBtn').addEventListener('click', openDaily);
-
-  // навигация
-  document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.addEventListener('click', () => switchScreen(btn.dataset.screen));
-  });
-
-  // энергия — регенерация
+  // 1. Цикл восстановления энергии (каждую секунду)
   setInterval(() => {
     if (state.energy < ENERGY_MAX) {
       state.energy = Math.min(ENERGY_MAX, state.energy + ENERGY_REGEN);
@@ -1734,7 +656,7 @@ function init() {
     state.lastEnergyUpdate = Date.now();
   }, 1000);
 
-  // пассивный доход
+  // 2. Цикл пассивного дохода от бригады (каждую секунду)
   setInterval(() => {
     const inc = calcIncome();
     if (inc > 0) {
@@ -1744,44 +666,29 @@ function init() {
     }
   }, 1000);
 
-  // инспектор
-  scheduleInspector();
-
-  // автосейв
-  setInterval(save, 5000);
-
-  // регенерация энергии оффлайн
-  const elapsed = Math.floor((Date.now() - state.lastEnergyUpdate) / 1000);
-  if (elapsed > 0) state.energy = Math.min(ENERGY_MAX, state.energy + elapsed);
-
-  // стартовое приветствие
-  setTimeout(() => {
-    if (state.totalClicks === 0) {
-      toast('Привет, шеф! Жми на молоток — начнём стройку!', 'success');
+  // 3. ЦИКЛ АВТОКЛИКЕРА (каждую секунду)
+  setInterval(() => {
+    if (state.autoClicker > 0 && state.energy > 0) {
+      // Автокликер делает 1 клик за уровень в секунду
+      // Но чтобы не спамить анимациями, мы просто добавляем кирпичи
+      let power = calcClickPower() * state.autoClicker;
+      
+      // Тратим энергию
+      let energyCost = state.autoClicker;
+      if (state.energy >= energyCost) {
+        state.energy -= energyCost;
+        addBricks(power);
+        
+        // Легкий звук автокликера (тихий)
+        if(audioCtx && state.settings.sound) {
+            // Можно добавить специфичный тихий звук, но пока пропустим чтобы не бесило
+        }
+      }
     }
-  }, 800);
+  }, 1000);
 
-  // событие click frenzy - энергия не тратится
-  console.log('%cMY BRIGADA v1.0.0 — создатель @iticov', 'color:#FF6B1A;font-weight:bold;font-size:14px');
-}
-
-window.addEventListener('DOMContentLoaded', init);
-
-/* ---------- ГЛОБАЛЬНЫЕ ФУНКЦИИ (для inline onclick) ---------- */
-window.buyUnit = buyUnit;
-window.buyUpgrade = buyUpgrade;
-window.prestige = prestige;
-window.activatePromo = activatePromo;
-window.copyRef = copyRef;
-window.toggleEvent = toggleEvent;
-window.bribeInspector = bribeInspector;
-window.payInspector = payInspector;
-window.closeModal = closeModal;
-
-/* ---------- ОСТАНОВКА ПРИ ЗАКРЫТИИ ---------- */
-window.addEventListener('beforeunload', save);
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) save();
+  // Автосейв
+  setInterval(save, 5000);
 });
 </script>
 </body>
