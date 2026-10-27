@@ -4,37 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MY BRIGADA — Официальная игра</title>
-    
-    <!-- Подключение Telegram WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
     <style>
-        /* =======================================================
-           ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ И СБРОС СТИЛЕЙ
-           ======================================================= */
         :root {
-            /* Основная цветовая палитра (Брендинг MY BRIGADA) */
             --color-primary: #FF6B1A;
             --color-primary-dark: #E05500;
             --color-primary-light: #FF8A3D;
-            
-            /* Темная тема */
             --color-bg-main: #141B29;
             --color-bg-secondary: #1A2233;
             --color-bg-element: #232D42;
-            
-            /* Акцентные цвета */
             --color-accent-yellow: #FFD60A;
             --color-accent-green: #2ECC71;
             --color-accent-red: #FF4D4D;
             --color-accent-purple: #9B59B6;
             --color-accent-blue: #2AABEE;
-            
-            /* Текстовые цвета */
             --color-text-main: #FFFFFF;
             --color-text-muted: #8A94A6;
-            
-            /* Геометрия и тени */
             --radius-small: 10px;
             --radius-medium: 16px;
             --radius-large: 20px;
@@ -42,796 +27,193 @@
             --shadow-glow-orange: 0 10px 30px rgba(255, 107, 26, 0.4);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent; /* Убираем синюю рамку при тапе на мобилках */
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
         html, body {
-            height: 100%;
-            overflow: hidden;
+            height: 100%; overflow: hidden;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--color-bg-main);
-            color: var(--color-text-main);
-            user-select: none; /* Запрет выделения текста */
-            -webkit-user-select: none;
+            background-color: var(--color-bg-main); color: var(--color-text-main);
+            user-select: none; -webkit-user-select: none;
         }
 
-        /* Главный контейнер приложения */
         #app {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            height: 100dvh; /* Для мобильных браузеров */
-            max-width: 520px; /* Ограничение ширины для планшетов и ПК */
-            margin: 0 auto;
-            position: relative;
+            display: flex; flex-direction: column; height: 100vh; height: 100dvh;
+            max-width: 520px; margin: 0 auto; position: relative;
             background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-main) 100%);
         }
 
-        /* =======================================================
-           ЭКРАН ПОДПИСКИ НА КАНАЛ (Блокирует игру до подписки)
-           ======================================================= */
+        /* ЭКРАН ПОДПИСКИ */
         #screen-subscribe {
-            position: fixed;
-            inset: 0;
-            background-color: var(--color-bg-main);
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-            text-align: center;
+            position: fixed; inset: 0; background-color: var(--color-bg-main);
+            z-index: 99999; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; padding: 24px; text-align: center;
         }
+        .subscribe-title { font-size: 32px; font-weight: 900; margin-bottom: 16px; background: linear-gradient(90deg, var(--color-primary), var(--color-accent-yellow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subscribe-desc { font-size: 16px; color: var(--color-text-muted); margin-bottom: 40px; line-height: 1.6; max-width: 320px; }
+        .btn-tg-channel { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; max-width: 320px; padding: 18px; border-radius: var(--radius-medium); background-color: var(--color-accent-blue); color: white; text-decoration: none; font-weight: 800; font-size: 16px; margin-bottom: 24px; }
+        .btn-check-sub { width: 100%; max-width: 320px; padding: 18px; border-radius: var(--radius-medium); background-color: var(--color-primary); color: white; border: none; font-weight: 800; font-size: 16px; cursor: pointer; }
 
-        .subscribe-title {
-            font-size: 32px;
-            font-weight: 900;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
-            background: linear-gradient(90deg, var(--color-primary), var(--color-accent-yellow));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        /* ШАПКА */
+        .app-header { padding: 16px 16px 8px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .logo-text { font-size: 22px; font-weight: 900; background: linear-gradient(90deg, var(--color-primary), var(--color-accent-yellow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .icon-button { width: 40px; height: 40px; border-radius: 12px; background-color: var(--color-bg-element); border: none; color: var(--color-text-main); display: flex; align-items: center; justify-content: center; cursor: pointer; }
 
-        .subscribe-desc {
-            font-size: 16px;
-            color: var(--color-text-muted);
-            margin-bottom: 40px;
-            line-height: 1.6;
-            max-width: 320px;
-        }
-
-        .subscribe-desc b {
-            color: var(--color-text-main);
-        }
-
-        .btn-tg-channel {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            width: 100%;
-            max-width: 320px;
-            padding: 18px;
-            border-radius: var(--radius-medium);
-            background-color: var(--color-accent-blue);
-            color: white;
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 16px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 15px rgba(42, 171, 238, 0.3);
-            transition: transform 0.1s;
-        }
-
-        .btn-tg-channel:active {
-            transform: scale(0.97);
-        }
-
-        .btn-check-sub {
-            width: 100%;
-            max-width: 320px;
-            padding: 18px;
-            border-radius: var(--radius-medium);
-            background-color: var(--color-primary);
-            color: white;
-            border: none;
-            font-weight: 800;
-            font-size: 16px;
-            cursor: pointer;
-            box-shadow: var(--shadow-glow-orange);
-            transition: transform 0.1s;
-        }
-
-        .btn-check-sub:active {
-            transform: scale(0.97);
-        }
-
-        /* =======================================================
-           ШАПКА ПРИЛОЖЕНИЯ
-           ======================================================= */
-        .app-header {
-            padding: 16px 16px 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-        }
-
-        .logo-text {
-            font-size: 22px;
-            font-weight: 900;
-            letter-spacing: 0.5px;
-            background: linear-gradient(90deg, var(--color-primary), var(--color-accent-yellow));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .icon-button {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background-color: var(--color-bg-element);
-            border: none;
-            color: var(--color-text-main);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform 0.1s, background-color 0.2s;
-        }
-
-        .icon-button:active {
-            transform: scale(0.9);
-            background-color: var(--color-bg-secondary);
-        }
-
-        /* =======================================================
-           ПАНЕЛЬ РЕСУРСОВ (Сверху)
-           ======================================================= */
-        .resources-bar {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-            padding: 0 16px 16px;
-            flex-shrink: 0;
-        }
-
-        .resource-item {
-            background-color: var(--color-bg-element);
-            border-radius: 12px;
-            padding: 10px 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 800;
-            font-size: 14px;
-            min-width: 0;
-        }
-
-        .resource-item span {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
+        /* РЕСУРСЫ */
+        .resources-bar { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 0 16px 16px; flex-shrink: 0; }
+        .resource-item { background-color: var(--color-bg-element); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14px; }
         .resource-bricks span { color: var(--color-primary); }
         .resource-money span { color: var(--color-accent-green); }
         .resource-stars span { color: var(--color-accent-yellow); }
 
-        /* =======================================================
-           КОНТЕЙНЕР ЭКРАНОВ
-           ======================================================= */
-        .screens-container {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding: 0 16px 20px;
-            scrollbar-width: none;
-        }
+        /* ЭКРАНЫ */
+        .screens-container { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 0 16px 20px; scrollbar-width: none; }
+        .screens-container::-webkit-scrollbar { display: none; }
+        .screen { display: none; animation: fadeIn 0.3s ease; }
+        .screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .section-title { font-size: 15px; font-weight: 800; margin: 20px 0 12px; color: var(--color-text-muted); text-transform: uppercase; }
 
-        .screens-container::-webkit-scrollbar {
-            display: none;
-        }
-
-        .screen {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .screen.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-title {
-            font-size: 15px;
-            font-weight: 800;
-            margin: 20px 0 12px;
-            color: var(--color-text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* =======================================================
-           ЭКРАН СТРОЙКИ (Главный экран)
-           ======================================================= */
+        /* ЗДАНИЕ И РАБОЧИЕ */
         .building-viewport {
-            position: relative;
-            height: 280px;
-            margin: 10px 0 20px;
-            border-radius: var(--radius-medium);
-            background: linear-gradient(180deg, #1E2940 0%, #10161F 100%);
+            position: relative; height: 280px; margin: 10px 0 20px; border-radius: var(--radius-medium);
+            background: linear-gradient(180deg, #1E2940 0%, #10161F 100%); overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        
+        .building-ground { 
+            position: absolute; bottom: 0; left: 0; right: 0; height: 50px; 
+            background: #10161F; border-top: 2px solid var(--color-bg-element); z-index: 2; 
+            display: flex; align-items: flex-end; justify-content: center; gap: 4px; padding-bottom: 5px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
-        .building-stars-bg {
-            position: absolute;
-            inset: 0;
-            background-image: 
-                radial-gradient(1.5px 1.5px at 20% 20%, rgba(255, 255, 255, 0.5), transparent),
-                radial-gradient(1.5px 1.5px at 70% 15%, rgba(255, 255, 255, 0.4), transparent),
-                radial-gradient(1px 1px at 45% 30%, rgba(255, 255, 255, 0.4), transparent);
+        .workers-container {
+            position: absolute; bottom: 0; left: 0; right: 0; display: flex;
+            justify-content: center; align-items: flex-end; gap: 2px; z-index: 3; padding: 0 10px;
         }
+
+        .worker-icon { width: 20px; height: 20px; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
         .camera-container {
-            position: absolute;
-            bottom: 40px;
-            left: 0;
-            right: 0;
-            display: flex;
-            flex-direction: column-reverse;
-            align-items: center;
+            position: absolute; bottom: 50px; left: 0; right: 0; display: flex;
+            flex-direction: column-reverse; align-items: center;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-
         .floor-block {
-            width: 110px;
-            height: 15px;
-            background: linear-gradient(180deg, var(--color-primary), var(--color-primary-dark));
-            border-top: 2px solid rgba(255, 255, 255, 0.4);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-            position: relative;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            width: 110px; height: 15px; background: linear-gradient(180deg, var(--color-primary), var(--color-primary-dark));
+            border-top: 2px solid rgba(255, 255, 255, 0.4); border-bottom: 1px solid rgba(0, 0, 0, 0.5); position: relative;
         }
-
         .floor-block::before {
-            content: "";
-            position: absolute;
-            top: 4px;
-            left: 10px;
-            width: 10px;
-            height: 5px;
-            background: var(--color-accent-yellow);
-            box-shadow: 20px 0 0 var(--color-accent-yellow), 40px 0 0 var(--color-accent-yellow), 60px 0 0 var(--color-accent-yellow);
-            opacity: 0.7;
+            content: ""; position: absolute; top: 4px; left: 10px; width: 10px; height: 5px; background: var(--color-accent-yellow);
+            box-shadow: 20px 0 0 var(--color-accent-yellow), 40px 0 0 var(--color-accent-yellow), 60px 0 0 var(--color-accent-yellow); opacity: 0.7;
         }
-
-        .building-ground {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 40px;
-            background: #10161F;
-            border-top: 2px solid var(--color-bg-element);
-            z-index: 2;
-        }
-
+        
         .floor-indicator {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-weight: 800;
-            font-size: 14px;
-            z-index: 3;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            position: absolute; top: 16px; left: 16px; background: rgba(0, 0, 0, 0.6); padding: 8px 16px;
+            border-radius: 30px; font-weight: 800; font-size: 14px; z-index: 4; display: flex; align-items: center; gap: 8px;
         }
 
-        /* =======================================================
-           КЛИК-ЗОНА И КНОПКА МОЛОТКА
-           ======================================================= */
-        .click-zone {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
+        /* КЛИК-ЗОНА */
+        .click-zone { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 24px; }
         .main-hammer-btn {
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            border: none;
+            width: 160px; height: 160px; border-radius: 50%; border: none;
             background: radial-gradient(circle at 30% 30%, var(--color-primary-light), var(--color-primary) 60%, var(--color-primary-dark));
             box-shadow: var(--shadow-glow-orange), inset 0 -8px 16px rgba(0, 0, 0, 0.25);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform 0.08s;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.08s;
         }
+        .main-hammer-btn:active { transform: scale(0.92); }
+        .main-hammer-btn svg { width: 80px; height: 80px; }
 
-        .main-hammer-btn:active {
-            transform: scale(0.92);
-        }
+        .energy-progress-container { width: 100%; max-width: 300px; display: flex; flex-direction: column; gap: 6px; align-items: center; }
+        .energy-bar-bg { width: 100%; height: 12px; background-color: var(--color-bg-element); border-radius: 6px; overflow: hidden; }
+        .energy-bar-fill { height: 100%; width: 100%; background: linear-gradient(90deg, var(--color-accent-yellow), var(--color-primary)); transition: width 0.3s; }
+        .energy-text { font-size: 12px; color: var(--color-text-muted); font-weight: 700; display: flex; align-items: center; gap: 6px; }
 
-        .main-hammer-btn svg {
-            width: 80px;
-            height: 80px;
-            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
-        }
+        /* ПРОГРЕСС ЭТАЖА */
+        .floor-progress-container { width: 100%; max-width: 300px; display: flex; flex-direction: column; gap: 4px; align-items: center; margin-top: 4px; }
+        .floor-bar-bg { width: 100%; height: 6px; background-color: var(--color-bg-element); border-radius: 3px; overflow: hidden; }
+        .floor-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #2ECC71, #27AE60); transition: width 0.3s; }
+        .floor-text { font-size: 10px; color: var(--color-text-muted); font-weight: 600; }
 
-        .energy-progress-container {
-            width: 100%;
-            max-width: 300px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            align-items: center;
-        }
-
-        .energy-bar-bg {
-            width: 100%;
-            height: 12px;
-            background-color: var(--color-bg-element);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        .energy-bar-fill {
-            height: 100%;
-            width: 100%;
-            background: linear-gradient(90deg, var(--color-accent-yellow), var(--color-primary));
-            transition: width 0.3s;
-            border-radius: 6px;
-        }
-
-        .energy-text {
-            font-size: 12px;
-            color: var(--color-text-muted);
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* Всплывающий текст (+Кирпичи) */
-        .floating-text {
-            position: fixed;
-            pointer-events: none;
-            font-weight: 900;
-            font-size: 26px;
-            color: var(--color-accent-yellow);
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
-            animation: floatUpFade 0.9s ease forwards;
-            z-index: 9999;
-        }
-
-        @keyframes floatUpFade {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-100px) scale(1.5); }
-        }
-
-        /* =======================================================
-           КАРТОЧКИ (Юниты, Апгрейды, Барыга)
-           ======================================================= */
-        .ui-card {
-            background-color: var(--color-bg-element);
-            border-radius: var(--radius-medium);
-            padding: 16px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: transform 0.1s;
-        }
-
-        .ui-card:active {
-            transform: scale(0.98);
-        }
-
-        .ui-card-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
-            background-color: var(--color-bg-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            color: var(--color-primary);
-        }
-
-        .ui-card-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .ui-card-title {
-            font-weight: 800;
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-
-        .ui-card-desc {
-            font-size: 13px;
-            color: var(--color-text-muted);
-        }
-
-        .ui-card-desc b {
-            color: var(--color-accent-green);
-        }
-
-        .ui-btn {
-            padding: 10px 16px;
-            border-radius: var(--radius-small);
-            border: none;
-            background-color: var(--color-primary);
-            color: white;
-            font-weight: 800;
-            font-size: 14px;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: transform 0.1s, opacity 0.2s;
-        }
-
-        .ui-btn:active {
-            transform: scale(0.94);
-        }
-
-        .ui-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
+        /* КАРТОЧКИ */
+        .ui-card { background-color: var(--color-bg-element); border-radius: var(--radius-medium); padding: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 16px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .ui-card-icon { width: 52px; height: 52px; border-radius: 14px; background-color: var(--color-bg-secondary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--color-primary); }
+        .ui-card-info { flex: 1; }
+        .ui-card-title { font-weight: 800; font-size: 16px; margin-bottom: 4px; }
+        .ui-card-desc { font-size: 13px; color: var(--color-text-muted); }
+        .ui-card-desc b { color: var(--color-accent-green); }
+        .ui-btn { padding: 10px 16px; border-radius: var(--radius-small); border: none; background-color: var(--color-primary); color: white; font-weight: 800; font-size: 14px; cursor: pointer; }
+        .ui-btn:active { transform: scale(0.94); }
+        .ui-btn:disabled { opacity: 0.4; }
         .ui-btn.green { background-color: var(--color-accent-green); }
         .ui-btn.purple { background-color: var(--color-accent-purple); }
         .ui-btn.yellow { background-color: var(--color-accent-yellow); color: var(--color-bg-main); }
+        .ui-btn.blue { background-color: var(--color-accent-blue); }
+        .barger-buttons { display: flex; gap: 6px; }
+        .barger-buttons button { padding: 8px 10px; font-size: 12px; border-radius: 8px; }
 
-        /* Специфичные стили для барыги */
-        .barger-buttons {
-            display: flex;
-            gap: 6px;
-        }
-        .barger-buttons button {
-            padding: 8px 10px;
-            font-size: 12px;
-            border-radius: 8px;
-        }
+        /* НАСТРОЙКИ */
+        .settings-block { display: flex; justify-content: space-between; align-items: center; background-color: var(--color-bg-element); padding: 16px; border-radius: var(--radius-medium); margin-bottom: 12px; }
+        .settings-info h4 { font-size: 16px; margin-bottom: 4px; }
+        .settings-info p { font-size: 13px; color: var(--color-text-muted); }
+        .toggle-switch { position: relative; display: inline-block; width: 54px; height: 30px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--color-bg-main); transition: .4s; border-radius: 34px; border: 2px solid var(--color-text-muted); }
+        .toggle-slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: var(--color-text-muted); transition: .4s; border-radius: 50%; }
+        input:checked + .toggle-slider { background-color: var(--color-primary); border-color: var(--color-primary); }
+        input:checked + .toggle-slider:before { transform: translateX(24px); background-color: white; }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 22px; width: 22px; border-radius: 50%; background: var(--color-primary); cursor: pointer; margin-top: -9px; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: var(--color-bg-main); border-radius: 2px; }
+        .promo-input-field { flex: 1; background-color: var(--color-bg-main); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-small); padding: 12px 16px; color: var(--color-text-main); font-weight: 700; text-transform: uppercase; outline: none; }
 
-        /* =======================================================
-           НАСТРОЙКИ
-           ======================================================= */
-        .settings-block {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--color-bg-element);
-            padding: 16px;
-            border-radius: var(--radius-medium);
-            margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
+        /* НАВИГАЦИЯ */
+        .bottom-nav { display: flex; justify-content: space-around; padding: 10px 8px 14px; background-color: var(--color-bg-secondary); border-top: 1px solid rgba(255, 255, 255, 0.06); flex-shrink: 0; padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }
+        .nav-item { background: none; border: none; color: var(--color-text-muted); display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 12px; flex: 1; }
+        .nav-item.active { color: var(--color-primary); background-color: rgba(255, 107, 26, 0.1); }
 
-        .settings-info h4 {
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
+        /* МОДАЛКИ И ТОСТЫ */
+        .modal-overlay { position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.8); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 24px; backdrop-filter: blur(5px); }
+        .modal-overlay.show { display: flex; }
+        .modal-content { background-color: var(--color-bg-secondary); border-radius: var(--radius-large); padding: 32px 24px; max-width: 340px; width: 100%; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); animation: modalScaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes modalScaleIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-icon-wrapper { width: 80px; height: 80px; margin: 0 auto 20px; border-radius: 50%; background-color: rgba(255, 107, 26, 0.15); display: flex; align-items: center; justify-content: center; color: var(--color-primary); }
+        .modal-title { font-size: 22px; font-weight: 900; margin-bottom: 10px; }
+        .modal-text { font-size: 15px; color: var(--color-text-muted); line-height: 1.5; margin-bottom: 24px; white-space: pre-line; }
+        .modal-button { width: 100%; padding: 16px; border-radius: var(--radius-medium); border: none; background-color: var(--color-primary); color: white; font-weight: 800; font-size: 16px; cursor: pointer; }
 
-        .settings-info p {
-            font-size: 13px;
-            color: var(--color-text-muted);
-        }
-
-        /* Кастомный переключатель (Switch) */
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 54px;
-            height: 30px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--color-bg-main);
-            transition: .4s;
-            border-radius: 34px;
-            border: 2px solid var(--color-text-muted);
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 3px;
-            bottom: 3px;
-            background-color: var(--color-text-muted);
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .toggle-slider {
-            background-color: var(--color-primary);
-            border-color: var(--color-primary);
-        }
-
-        input:checked + .toggle-slider:before {
-            transform: translateX(24px);
-            background-color: white;
-        }
-
-        /* Ползунок громкости */
-        input[type=range] {
-            -webkit-appearance: none;
-            width: 100%;
-            background: transparent;
-        }
-
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 22px;
-            width: 22px;
-            border-radius: 50%;
-            background: var(--color-primary);
-            cursor: pointer;
-            margin-top: -9px;
-            box-shadow: 0 0 10px rgba(255, 107, 26, 0.5);
-        }
-
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 4px;
-            cursor: pointer;
-            background: var(--color-bg-main);
-            border-radius: 2px;
-        }
-
-        /* Поле ввода промокода */
-        .promo-input-field {
-            flex: 1;
-            background-color: var(--color-bg-main);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-small);
-            padding: 12px 16px;
-            color: var(--color-text-main);
-            font-weight: 700;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            outline: none;
-        }
-
-        .promo-input-field:focus {
-            border-color: var(--color-primary);
-        }
-
-        /* =======================================================
-           НИЖНЯЯ НАВИГАЦИЯ
-           ======================================================= */
-        .bottom-nav {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 8px 14px;
-            background-color: var(--color-bg-secondary);
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            flex-shrink: 0;
-            padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
-        }
-
-        .nav-item {
-            background: none;
-            border: none;
-            color: var(--color-text-muted);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-            padding: 6px 12px;
-            border-radius: 12px;
-            transition: color 0.2s, background-color 0.2s;
-            flex: 1;
-        }
-
-        .nav-item.active {
-            color: var(--color-primary);
-            background-color: rgba(255, 107, 26, 0.1);
-        }
-
-        .nav-item:active {
-            transform: scale(0.92);
-        }
-
-        /* =======================================================
-           МОДАЛЬНЫЕ ОКНА (Уведомления)
-           ======================================================= */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            padding: 24px;
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-overlay.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background-color: var(--color-bg-secondary);
-            border-radius: var(--radius-large);
-            padding: 32px 24px;
-            max-width: 340px;
-            width: 100%;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: modalScaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes modalScaleIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .modal-icon-wrapper {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            border-radius: 50%;
-            background-color: rgba(255, 107, 26, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--color-primary);
-        }
-
-        .modal-title {
-            font-size: 22px;
-            font-weight: 900;
-            margin-bottom: 10px;
-        }
-
-        .modal-text {
-            font-size: 15px;
-            color: var(--color-text-muted);
-            line-height: 1.5;
-            margin-bottom: 24px;
-            white-space: pre-line;
-        }
-
-        .modal-button {
-            width: 100%;
-            padding: 16px;
-            border-radius: var(--radius-medium);
-            border: none;
-            background-color: var(--color-primary);
-            color: white;
-            font-weight: 800;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        /* =======================================================
-           УВЕДОМЛЕНИЯ TOAST
-           ======================================================= */
-        #toast-container {
-            position: fixed;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%) translateY(30px);
-            background-color: var(--color-bg-element);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 14px 24px;
-            border-radius: var(--radius-medium);
-            font-weight: 700;
-            font-size: 14px;
-            box-shadow: var(--shadow-heavy);
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 10001;
-            text-align: center;
-            max-width: 90%;
-        }
-
-        #toast-container.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
+        #toast-container { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(30px); background-color: var(--color-bg-element); border: 1px solid rgba(255, 255, 255, 0.1); padding: 14px 24px; border-radius: var(--radius-medium); font-weight: 700; font-size: 14px; box-shadow: var(--shadow-heavy); opacity: 0; transition: all 0.3s; z-index: 10001; text-align: center; }
+        #toast-container.show { opacity: 1; transform: translateX(-50%) translateY(0); }
         #toast-container.success { border-color: var(--color-accent-green); }
         #toast-container.error { border-color: var(--color-accent-red); }
 
-        /* =======================================================
-           ЭФФЕКТЫ (Конфетти)
-           ======================================================= */
-        .confetti-particle {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            pointer-events: none;
-            z-index: 10002;
-            animation: confettiFall linear forwards;
-        }
-
-        @keyframes confettiFall {
-            0% { transform: translateY(0) rotate(0); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
+        .confetti-particle { position: fixed; width: 10px; height: 10px; pointer-events: none; z-index: 10002; animation: confettiFall linear forwards; }
+        @keyframes confettiFall { 0% { transform: translateY(0) rotate(0); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+        
+        /* СТИЛИ ДЛЯ ОКНА ПРОВЕРКИ */
+        .inspect-btn { margin-bottom: 10px; display: block; width: 100%; padding: 12px; border-radius: var(--radius-small); font-weight: 800; font-size: 14px; border: none; cursor: pointer; text-align: left; padding-left: 20px;}
+        .inspect-btn:active { opacity: 0.8; }
     </style>
 </head>
 <body>
 
-    <!-- ЭКРАН ПОДПИСКИ -->
     <div id="screen-subscribe">
         <h2 class="subscribe-title">MY BRIGADA</h2>
-        <p class="subscribe-desc">
-            Чтобы начать строить свою империю, подпишись на наш официальный канал. Там проходят розыгрыши, публикуются промокоды и анонсы обновлений!
-        </p>
-        <a href="https://t.me/Mybriga" target="_blank" class="btn-tg-channel">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
-            Подписаться на канал
-        </a>
+        <p class="subscribe-desc">Чтобы начать строить свою империю, подпишись на наш официальный канал. Там проходят розыгрыши и публикуются промокоды!</p>
+        <a href="https://t.me/Mybriga" target="_blank" class="btn-tg-channel">Подписаться на канал</a>
         <button class="btn-check-sub" onclick="verifySubscription()">Я подписался, играть!</button>
     </div>
 
-    <!-- ОСНОВНОЕ ПРИЛОЖЕНИЕ -->
     <div id="app" style="display: none;">
-        
-        <!-- Шапка -->
         <header class="app-header">
             <div class="logo-text">MY BRIGADA</div>
             <div class="header-actions">
-                <!-- Кнопка ежедневной награды (заглушка) -->
-                <button class="icon-button" id="btn-daily">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.6 5.6 6 .8-4.4 4.2 1.1 6L12 15.8 6.7 18.6l1.1-6L3.4 8.4l6-.8L12 2Z" fill="currentColor"/></svg>
+                <button class="icon-button" title="Вызвать Бригадира" onclick="callInspector()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="currentColor"/></svg>
                 </button>
             </div>
         </header>
 
-        <!-- Панель ресурсов -->
         <div class="resources-bar">
             <div class="resource-item resource-bricks">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="5" rx="1" fill="var(--color-primary)"/><rect x="3" y="13" width="18" height="5" rx="1" fill="var(--color-primary)"/><path d="M9 6v5M15 13v5" stroke="var(--color-bg-main)" stroke-width="1.5"/></svg>
@@ -847,23 +229,20 @@
             </div>
         </div>
 
-        <!-- Экраны -->
         <div class="screens-container" id="screens-container">
-            
-            <!-- ЭКРАН: СТРОЙКА -->
+            <!-- СТРОЙКА -->
             <div class="screen active" id="screen-build">
-                
                 <div class="building-viewport">
-                    <div class="building-stars-bg"></div>
                     <div class="floor-indicator">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 13a8 8 0 0 1 16 0v1H4v-1Z" stroke="var(--color-accent-yellow)" stroke-width="2"/><path d="M3 17h18" stroke="var(--color-accent-yellow)" stroke-width="2" stroke-linecap="round"/></svg>
                         Этаж <span id="val-floor">1</span>
                     </div>
-                    <!-- Контейнер камеры, который едет вверх -->
-                    <div class="camera-container" id="camera">
-                        <div id="building-render"></div>
+                    
+                    <div class="camera-container" id="camera"><div id="building-render"></div></div>
+                    
+                    <div class="building-ground">
+                        <div class="workers-container" id="workers-render"></div>
                     </div>
-                    <div class="building-ground"></div>
                 </div>
 
                 <div class="click-zone">
@@ -876,13 +255,13 @@
                     </button>
                     
                     <div class="energy-progress-container">
-                        <div class="energy-bar-bg">
-                            <div class="energy-bar-fill" id="energy-fill"></div>
-                        </div>
-                        <div class="energy-text">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" fill="var(--color-accent-yellow)"/></svg>
-                            <span id="val-energy">1000</span> / 1000
-                        </div>
+                        <div class="energy-bar-bg"><div class="energy-bar-fill" id="energy-fill"></div></div>
+                        <div class="energy-text"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" fill="var(--color-accent-yellow)"/></svg><span id="val-energy">1000</span> / <span id="val-max-energy">1000</span></div>
+                    </div>
+
+                    <div class="floor-progress-container">
+                        <div class="floor-bar-bg"><div class="floor-bar-fill" id="floor-fill"></div></div>
+                        <div class="floor-text" id="val-floor-progress">0 / 500 до этажа</div>
                     </div>
                 </div>
 
@@ -910,75 +289,66 @@
                 </div>
             </div>
 
-            <!-- ЭКРАН: БРИГАДА -->
+            <!-- БРИГАДА -->
             <div class="screen" id="screen-brigade">
                 <div class="section-title">Моя бригада</div>
                 <div id="list-units"></div>
             </div>
 
-            <!-- ЭКРАН: АПГРЕЙДЫ -->
+            <!-- АПГРЕЙДЫ -->
             <div class="screen" id="screen-upgrades">
                 <div class="section-title">Улучшения инструментов</div>
                 <div id="list-upgrades"></div>
                 
-                <div class="section-title">Автоматизация</div>
+                <!-- НОВЫЙ БЛОК: УЛУЧШЕНИЕ ЭНЕРГИИ -->
+                <div class="section-title">Склад энергии</div>
                 <div class="ui-card">
-                    <div class="ui-card-icon" style="background:var(--color-accent-purple); color:white;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="2"/></svg>
+                    <div class="ui-card-icon" style="background:var(--color-accent-yellow); color:var(--color-bg-main);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" fill="currentColor"/></svg>
                     </div>
                     <div class="ui-card-info">
+                        <div class="ui-card-title">Расширить склад <span id="val-energy-lvl" style="color:var(--color-primary)"></span></div>
+                        <div class="ui-card-desc">Макс. энергия: <b id="val-next-energy">2000</b></div>
+                    </div>
+                    <button class="ui-btn yellow" id="btn-buy-energy" onclick="buyEnergyUpgrade()">800 ₽</button>
+                </div>
+
+                <div class="section-title">Автоматизация</div>
+                <div class="ui-card">
+                    <div class="ui-card-icon" style="background:var(--color-accent-purple); color:white;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="2"/></svg></div>
+                    <div class="ui-card-info">
                         <div class="ui-card-title">Автокликер <span id="val-auto-lvl" style="color:var(--color-primary)"></span></div>
-                        <div class="ui-card-desc">Бьет молотком вместо тебя (1 раз/сек)</div>
+                        <div class="ui-card-desc">Бьет молотком вместо тебя</div>
                     </div>
                     <button class="ui-btn purple" id="btn-buy-auto" onclick="buyAutoClicker()">2000 ₽</button>
                 </div>
             </div>
 
-            <!-- ЭКРАН: ТОП -->
+            <!-- ТОП -->
             <div class="screen" id="screen-leaderboard">
                 <div class="section-title">Лучшие строители</div>
                 <div id="list-leaderboard"></div>
             </div>
 
-            <!-- ЭКРАН: НАСТРОЙКИ -->
+            <!-- НАСТРОЙКИ -->
             <div class="screen" id="screen-settings">
                 <div class="section-title">Настройки игры</div>
-                
                 <div class="settings-block">
-                    <div class="settings-info">
-                        <h4>Звуковые эффекты</h4>
-                        <p>Включить/выключить звуки</p>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="toggle-sound" onchange="toggleSoundSetting()">
-                        <span class="toggle-slider"></span>
-                    </label>
+                    <div class="settings-info"><h4>Звуковые эффекты</h4></div>
+                    <label class="toggle-switch"><input type="checkbox" id="toggle-sound" onchange="toggleSoundSetting()"><span class="toggle-slider"></span></label>
                 </div>
-
                 <div class="settings-block" style="flex-direction: column; align-items: flex-start; gap: 16px;">
-                    <div class="settings-info">
-                        <h4>Громкость: <span id="val-vol">50</span>%</h4>
-                    </div>
+                    <div class="settings-info"><h4>Громкость: <span id="val-vol">50</span>%</h4></div>
                     <input type="range" id="slider-vol" min="0" max="100" value="50" oninput="changeVolumeSetting(this.value)">
                 </div>
-
                 <div class="settings-block">
-                    <div class="settings-info">
-                        <h4>Вибрация</h4>
-                        <p>Тактильный отклик при кликах</p>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="toggle-vibe" checked onchange="toggleVibeSetting()">
-                        <span class="toggle-slider"></span>
-                    </label>
+                    <div class="settings-info"><h4>Вибрация</h4></div>
+                    <label class="toggle-switch"><input type="checkbox" id="toggle-vibe" checked onchange="toggleVibeSetting()"><span class="toggle-slider"></span></label>
                 </div>
 
                 <div class="section-title">Промокод</div>
                 <div class="settings-block" style="flex-direction: column; align-items: stretch; gap: 12px;">
-                    <div class="settings-info">
-                        <h4>Активировать код</h4>
-                        <p>Вводи промокоды из нашего ТГК</p>
-                    </div>
+                    <div class="settings-info"><h4>Активировать код</h4></div>
                     <div style="display: flex; gap: 8px;">
                         <input type="text" id="promo-input" class="promo-input-field" placeholder="ВВЕДИ КОД" maxlength="15">
                         <button class="ui-btn green" onclick="activatePromoCode()">ОК</button>
@@ -986,206 +356,109 @@
                 </div>
 
                 <div class="section-title">Информация</div>
-                
                 <a href="https://t.me/Mybriga" target="_blank" style="text-decoration: none; color: inherit; display: block;">
                     <div class="ui-card">
-                        <div class="ui-card-icon" style="background: var(--color-accent-blue); color: white;">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
-                        </div>
-                        <div class="ui-card-info">
-                            <div class="ui-card-title">Телеграм-канал</div>
-                            <div class="ui-card-desc">@Mybriga</div>
-                        </div>
+                        <div class="ui-card-icon" style="background: var(--color-accent-blue); color: white;"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg></div>
+                        <div class="ui-card-info"><div class="ui-card-title">Телеграм-канал</div><div class="ui-card-desc">@Mybriga</div></div>
                     </div>
                 </a>
-
                 <div class="ui-card">
-                    <div class="ui-card-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Z" stroke="currentColor" stroke-width="2"/><path d="M12 16v-4M12 8h.01" stroke="currentColor" stroke-width="2"/></svg>
-                    </div>
-                    <div class="ui-card-info">
-                        <div class="ui-card-title">Разработчик</div>
-                        <div class="ui-card-desc">Создатель: <b>@iticov</b></div>
-                    </div>
+                    <div class="ui-card-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Z" stroke="currentColor" stroke-width="2"/><path d="M12 16v-4M12 8h.01" stroke="currentColor" stroke-width="2"/></svg></div>
+                    <div class="ui-card-info"><div class="ui-card-title">Разработчик</div><div class="ui-card-desc">Создатель: <b>@iticov</b></div></div>
                 </div>
             </div>
         </div>
 
-        <!-- НАВИГАЦИЯ -->
         <nav class="bottom-nav">
-            <button class="nav-item active" data-target="build">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 13a8 8 0 0 1 16 0v1H4v-1Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M3 17h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 13V7a3 3 0 0 1 6 0v6" stroke="currentColor" stroke-width="2"/></svg>
-                Стройка
-            </button>
-            <button class="nav-item" data-target="brigade">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="9" r="2.2" stroke="currentColor" stroke-width="2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                Бригада
-            </button>
-            <button class="nav-item" data-target="upgrades">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 20V5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6 11l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Апгрейды
-            </button>
-            <button class="nav-item" data-target="leaderboard">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7 6H4v1a4 4 0 0 0 4 4M17 6h3v1a4 4 0 0 1-4 4" stroke="currentColor" stroke-width="2"/><path d="M12 13v5M8 21h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                Топ
-            </button>
-            <button class="nav-item" data-target="settings">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                Настройки
-            </button>
+            <button class="nav-item active" data-target="build"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 13a8 8 0 0 1 16 0v1H4v-1Z" stroke="currentColor" stroke-width="2"/><path d="M3 17h18" stroke="currentColor" stroke-width="2"/><path d="M9 13V7a3 3 0 0 1 6 0v6" stroke="currentColor" stroke-width="2"/></svg>Стройка</button>
+            <button class="nav-item" data-target="brigade"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="9" r="2.2" stroke="currentColor" stroke-width="2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="2"/></svg>Бригада</button>
+            <button class="nav-item" data-target="upgrades"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 20V5" stroke="currentColor" stroke-width="2"/><path d="M6 11l6-6 6 6" stroke="currentColor" stroke-width="2"/></svg>Апгрейды</button>
+            <button class="nav-item" data-target="leaderboard"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z" stroke="currentColor" stroke-width="2"/><path d="M12 13v5M8 21h8" stroke="currentColor" stroke-width="2"/></svg>Топ</button>
+            <button class="nav-item" data-target="settings"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="currentColor" stroke-width="2"/></svg>Настройки</button>
         </nav>
     </div>
 
-    <!-- Уведомление (Тост) -->
     <div id="toast-container"></div>
 
-    <!-- Модальное окно -->
-    <div class="modal-overlay" id="modal-window">
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ БРИГАДИРА -->
+    <div class="modal-overlay" id="inspector-window">
         <div class="modal-content">
-            <div class="modal-icon-wrapper" id="modal-icon">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.6 5.6 6 .8-4.4 4.2 1.1 6L12 15.8 6.7 18.6l1.1-6L3.4 8.4l6-.8L12 2Z" fill="currentColor"/></svg>
+            <div class="modal-icon-wrapper" style="background: rgba(255, 77, 77, 0.15); color: var(--color-accent-red);">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="currentColor"/></svg>
             </div>
-            <h3 class="modal-title" id="modal-title">Заголовок</h3>
-            <p class="modal-text" id="modal-desc">Описание события или награды.</p>
-            <button class="modal-button" onclick="closeModalWindow()">Забрать</button>
+            <h3 class="modal-title">Проверка Бригадира!</h3>
+            <p class="modal-text" id="inspector-desc">Бригадир пришел проверить объект. Как ответишь?</p>
+            
+            <div id="inspector-choices"></div>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ОФФЛАЙН ДОХОДА -->
+    <div class="modal-overlay" id="offline-window">
+        <div class="modal-content">
+            <div class="modal-icon-wrapper" style="background: rgba(46, 204, 113, 0.15); color: var(--color-accent-green);">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm.5-8H11v4l3.25 1.95.75-1.23-2.5-1.47V9z" fill="currentColor"/></svg>
+            </div>
+            <h3 class="modal-title">С возвращением!</h3>
+            <p class="modal-text" id="offline-desc">Пока тебя не было, твоя бригада продолжала работать.</p>
+            <button class="modal-button" style="background-color: var(--color-accent-green);" onclick="document.getElementById('offline-window').classList.remove('show')">Забрать кирпичи</button>
         </div>
     </div>
 
     <script>
-        /* =======================================================
-           КОНСТАНТЫ И ИГРОВЫЕ ДАННЫЕ
-           ======================================================= */
         const MAX_CLICKS_PER_SEC = 25;
-        const ENERGY_MAX = 1000;
+        let ENERGY_MAX = 1000; // Теперь это переменная, ее можно качать
         const ENERGY_REGEN_RATE = 1;
-        const CLICKS_PER_FLOOR = 500;
-        const SAVE_KEY = 'my_brigada_save_data_v5';
+        const BRICKS_PER_FLOOR = 500;
+        const MAX_OFFLINE_TIME = 28800; // 8 часов
+        const SAVE_KEY = 'my_brigada_save_data_v10';
 
-        // Данные юнитов (Пассивный доход)
         const GAME_UNITS = {
-            mason: { 
-                name: 'Каменщик', 
-                baseCost: 100, 
-                income: 1, 
-                desc: '+1 кирпич/сек' 
-            },
-            mixer: { 
-                name: 'Бетономешалка', 
-                baseCost: 1500, 
-                income: 12, 
-                desc: '+12 кирпичей/сек' 
-            },
-            crane: { 
-                name: 'Башенный кран', 
-                baseCost: 15000, 
-                income: 80, 
-                desc: '+80 кирпичей/сек' 
-            },
-            foreman: { 
-                name: 'Бригадир', 
-                baseCost: 100000, 
-                income: 500, 
-                desc: '+500 кирпичей/сек' 
-            }
+            mason: { name: 'Каменщик', baseCost: 100, income: 1, desc: '+1 кирпич/сек' },
+            mixer: { name: 'Бетономешалка', baseCost: 1500, income: 12, desc: '+12 кирпичей/сек' },
+            crane: { name: 'Башенный кран', baseCost: 15000, income: 80, desc: '+80 кирпичей/сек' },
+            foreman: { name: 'Бригадир', baseCost: 100000, income: 500, desc: '+500 кирпичей/сек' }
         };
 
-        // Данные апгрейдов (Сила клика)
         const GAME_UPGRADES = {
-            hammer: { 
-                name: 'Усиленный молоток', 
-                baseCost: 500, 
-                effect: 2, 
-                desc: '+2 кирпича за клик' 
-            },
-            gloves: { 
-                name: 'Строительные перчатки', 
-                baseCost: 5000, 
-                effect: 8, 
-                desc: '+8 кирпичей за клик' 
-            },
-            helmet: { 
-                name: 'Супер-каска', 
-                baseCost: 25000, 
-                effect: 25, 
-                desc: '+25 кирпичей за клик' 
-            },
-            drill: { 
-                name: 'Отбойный молоток', 
-                baseCost: 120000, 
-                effect: 100, 
-                desc: '+100 кирпичей за клик' 
-            }
+            hammer: { name: 'Усиленный молоток', baseCost: 500, effect: 2, desc: '+2 кирпича за клик' },
+            gloves: { name: 'Строительные перчатки', baseCost: 5000, effect: 8, desc: '+8 кирпичей за клик' },
+            helmet: { name: 'Супер-каска', baseCost: 25000, effect: 25, desc: '+25 кирпичей за клик' },
+            drill: { name: 'Отбойный молоток', baseCost: 120000, effect: 100, desc: '+100 кирпичей за клик' }
         };
 
-        // Промокоды (База)
         const PROMOCODES = {
-            'MYBRIGADA': { bricks: 5000, money: 2000, desc: 'Стартовый бонус' },
-            'ITICOV':    { bricks: 10000, money: 5000, desc: 'Код от создателя' },
-            'BRIGADA':   { bricks: 2500, money: 1000, desc: 'Приветственный' },
-            'KEKS':      { bricks: 777,  money: 777,  desc: 'Просто так' }
+            'MYBRIGADA': { bricks: 5000, money: 2000 },
+            'ITICOV':    { bricks: 10000, money: 5000 },
+            'BRIGADA':   { bricks: 2500, money: 1000 },
+            'KEKS':      { bricks: 777,  money: 777 }
         };
 
-        /* =======================================================
-           СОСТОЯНИЕ ИГРЫ (State)
-           ======================================================= */
         let state = {
-            telegramId: 0,
-            firstName: 'Строитель',
-            
-            // Ресурсы
-            bricks: 0,
-            money: 0,
-            stars: 0,
-            
-            // Прогресс
-            floor: 1,
-            energy: ENERGY_MAX,
-            totalClicks: 0,
-            
-            // Инвентарь
-            units: {},      // { unit_id: count }
-            upgrades: {},   // { upgrade_id: count }
-            autoClickerLvl: 0,
-            
-            // Барыга
+            telegramId: 0, firstName: 'Строитель',
+            bricks: 0, money: 0, stars: 0,
+            floor: 1, energy: 1000, energyLvl: 0, // Уровень прокачки энергии
+            totalBricksEarned: 0,
+            units: {}, upgrades: {}, autoClickerLvl: 0,
             bargerPrice: 2,
-            
-            // Системное
-            lastEnergyUpdate: Date.now(),
-            lastClickTime: 0,
-            isSubscribed: false,
-            
-            // Настройки
-            settings: {
-                sound: true,
-                volume: 0.5,
-                vibration: true
-            }
+            lastEnergyUpdate: Date.now(), 
+            lastSavedTime: Date.now(),
+            lastClickTime: 0, isSubscribed: false,
+            settings: { sound: true, volume: 0.5, vibration: true }
         };
 
-        /* =======================================================
-           ИНИЦИАЛИЗАЦИЯ TELEGRAM И ЗАГРУЗКА
-           ======================================================= */
         function initApp() {
             const tg = window.Telegram?.WebApp;
             if (tg) {
-                tg.ready();
-                tg.expand();
+                tg.ready(); tg.expand();
                 try { tg.setHeaderColor('#141B29'); } catch(e){}
-                
                 const user = tg.initDataUnsafe?.user;
-                if (user) {
-                    state.telegramId = user.id;
-                    state.firstName = user.first_name || 'Строитель';
-                }
+                if (user) { state.telegramId = user.id; state.firstName = user.first_name || 'Строитель'; }
             }
             
-            loadGameData();
+            loadGameData(); 
             
-            // Проверка подписки (если уже подписан, пропускаем экран)
-            if (state.isSubscribed) {
-                showMainGame();
-            }
+            if (state.isSubscribed) showMainGame();
         }
 
         function loadGameData() {
@@ -1193,43 +466,69 @@
                 const saved = localStorage.getItem(SAVE_KEY);
                 if (saved) {
                     const parsed = JSON.parse(saved);
-                    // Слияние загруженных данных с дефолтным стейтом (на случай обновлений)
+                    const lastSaved = parsed.lastSavedTime || Date.now();
+                    
                     state = { ...state, ...parsed };
+                    if (!state.settings) state.settings = { sound: true, volume: 0.5, vibration: true };
                     
-                    if (!state.settings) {
-                        state.settings = { sound: true, volume: 0.5, vibration: true };
-                    }
+                    // Пересчитываем максимальную энергию исходя из уровня
+                    ENERGY_MAX = 1000 + (state.energyLvl * 1000);
                     
-                    // Оффлайн регенерация энергии
                     const now = Date.now();
-                    const secondsPassed = Math.floor((now - (state.lastEnergyUpdate || now)) / 1000);
-                    if (secondsPassed > 0) {
-                        state.energy = Math.min(ENERGY_MAX, state.energy + (secondsPassed * ENERGY_REGEN_RATE));
-                    }
-                    state.lastEnergyUpdate = now;
                     
-                    // Рандомим цену барыги при загрузке
+                    // --- ЛОГИКА ОФФЛАЙН-ДОХОДА ---
+                    const secondsPassed = Math.floor((now - lastSaved) / 1000);
+                    
+                    if (secondsPassed > 10) { 
+                        const effectiveSeconds = Math.min(secondsPassed, MAX_OFFLINE_TIME);
+                        let offlineIncome = 0;
+                        for (const [unitId, count] of Object.entries(state.units)) {
+                            if (GAME_UNITS[unitId]) offlineIncome += GAME_UNITS[unitId].income * count;
+                        }
+                        
+                        const totalEarned = offlineIncome * effectiveSeconds;
+                        
+                        if (totalEarned > 0) {
+                            state.bricks += totalEarned;
+                            state.totalBricksEarned += totalEarned;
+                            
+                            const targetFloor = Math.floor(state.totalBricksEarned / BRICKS_PER_FLOOR) + 1;
+                            if (targetFloor > state.floor) state.floor = targetFloor;
+                            
+                            setTimeout(() => {
+                                document.getElementById('offline-desc').innerHTML = `Пока тебя не было <b>(${formatTime(effectiveSeconds)})</b>, твоя бригада добыла:<br><br><span style="font-size:32px; color:var(--color-accent-green); font-weight:900;">+${formatNumber(totalEarned)} 🧱</span>`;
+                                document.getElementById('offline-window').classList.add('show');
+                            }, 500);
+                        }
+                    }
+                    
+                    const energySecondsPassed = Math.floor((now - (state.lastEnergyUpdate || now)) / 1000);
+                    if (energySecondsPassed > 0) {
+                        state.energy = Math.min(ENERGY_MAX, state.energy + (energySecondsPassed * ENERGY_REGEN_RATE));
+                    }
+                    
+                    state.lastEnergyUpdate = now;
+                    state.lastSavedTime = now;
                     state.bargerPrice = Math.floor(Math.random() * 4) + 1; 
                 }
-            } catch (e) {
-                console.warn("Ошибка загрузки сохранения", e);
-            }
+            } catch (e) { console.warn(e); }
+        }
+
+        function formatTime(seconds) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            if (h > 0) return `${h} ч. ${m} мин.`;
+            return `${m} мин.`;
         }
 
         function saveGameData() {
-            try {
-                localStorage.setItem(SAVE_KEY, JSON.stringify(state));
-            } catch (e) {
-                console.warn("Ошибка сохранения", e);
-            }
+            try { 
+                state.lastSavedTime = Date.now(); 
+                localStorage.setItem(SAVE_KEY, JSON.stringify(state)); 
+            } catch (e) {}
         }
 
-        /* =======================================================
-           ЭКРАН ПОДПИСКИ
-           ======================================================= */
         function verifySubscription() {
-            // В реальном приложении тут должен быть запрос к бэкенду для проверки подписки через бота
-            // Для MVP мы просто пускаем игрока
             state.isSubscribed = true;
             saveGameData();
             showMainGame();
@@ -1238,118 +537,53 @@
         function showMainGame() {
             document.getElementById('screen-subscribe').style.display = 'none';
             document.getElementById('app').style.display = 'flex';
-            
             renderAllUI();
             showToast('Добро пожаловать на стройку!', 'success');
+            scheduleInspector(); 
         }
 
-        /* =======================================================
-           АУДИО И ТАКТИЛЬНЫЙ ОТКЛИК
-           ======================================================= */
         let audioCtx = null;
-
         function playSoundEffect(freq = 400, duration = 0.05) {
             if (!state.settings.sound || state.settings.volume <= 0) return;
             try {
-                if (!audioCtx) {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                const osc = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                
-                osc.type = 'square';
-                osc.frequency.value = freq;
-                
-                gainNode.gain.value = 0.05 * state.settings.volume;
-                
-                osc.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                
-                osc.start();
-                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-                osc.stop(audioCtx.currentTime + duration);
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
+                osc.type = 'square'; osc.frequency.value = freq; gainNode.gain.value = 0.05 * state.settings.volume;
+                osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+                osc.start(); gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration); osc.stop(audioCtx.currentTime + duration);
             } catch (e) {}
         }
 
         function triggerHaptic() {
-            if (state.settings.vibration) {
-                try {
-                    window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
-                } catch(e){}
-            }
+            if (state.settings.vibration) { try { window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light'); } catch(e){} }
         }
 
-        /* =======================================================
-           НАСТРОЙКИ (Обработчики)
-           ======================================================= */
-        function toggleSoundSetting() {
-            state.settings.sound = document.getElementById('toggle-sound').checked;
-            saveGameData();
-            if (state.settings.sound) playSoundEffect(600, 0.1);
-        }
+        function toggleSoundSetting() { state.settings.sound = document.getElementById('toggle-sound').checked; saveGameData(); if (state.settings.sound) playSoundEffect(600, 0.1); }
+        function changeVolumeSetting(val) { document.getElementById('val-vol').textContent = val; state.settings.volume = val / 100; saveGameData(); }
+        function toggleVibeSetting() { state.settings.vibration = document.getElementById('toggle-vibe').checked; saveGameData(); triggerHaptic(); }
 
-        function changeVolumeSetting(val) {
-            document.getElementById('val-vol').textContent = val;
-            state.settings.volume = val / 100;
-            saveGameData();
-        }
-
-        function toggleVibeSetting() {
-            state.settings.vibration = document.getElementById('toggle-vibe').checked;
-            saveGameData();
-            triggerHaptic();
-        }
-
-        /* =======================================================
-           СИСТЕМА ПРОМОКОДОВ
-           ======================================================= */
         function activatePromoCode() {
             const input = document.getElementById('promo-input');
             const code = input.value.trim().toUpperCase();
-            
             if (!code) return;
-
-            // Проверка, не использовал ли уже
             const usedKey = 'promo_used_' + code;
-            if (localStorage.getItem(usedKey)) {
-                showToast('Ты уже использовал этот промокод!', 'error');
-                return;
-            }
-
+            if (localStorage.getItem(usedKey)) { showToast('Ты уже использовал этот промокод!', 'error'); return; }
             const promo = PROMOCODES[code];
-            if (!promo) {
-                showToast('Такого промокода не существует!', 'error');
-                return;
-            }
-
-            // Выдаем награды
+            if (!promo) { showToast('Такого промокода не существует!', 'error'); return; }
+            
             state.bricks += promo.bricks;
             state.money += promo.money;
+            state.totalBricksEarned += promo.bricks;
             
-            // Помечаем как использованный
+            checkFloorProgress();
+
             localStorage.setItem(usedKey, 'true');
-            
-            // Очищаем поле
             input.value = '';
-
-            // Визуальный эффект
-            spawnConfetti(40);
-            playSoundEffect(1000, 0.15);
-            triggerHaptic();
-            
-            showModalWindow(
-                'Промокод активирован!', 
-                `Код "${code}" успешно применен.\nТы получил: ${formatNumber(promo.bricks)} кирпичей и ${formatNumber(promo.money)} ₽!`, 
-                'star'
-            );
-
-            renderAllUI();
-            saveGameData();
+            spawnConfetti(40); playSoundEffect(1000, 0.15); triggerHaptic();
+            showModalWindow('Промокод активирован!', `Ты получил: ${formatNumber(promo.bricks)} кирпичей и ${formatNumber(promo.money)} ₽!`, 'star');
+            renderAllUI(); saveGameData();
         }
 
-        /* =======================================================
-           МАТЕМАТИКА И ЛОГИКА
-           ======================================================= */
         function formatNumber(num) {
             num = Math.floor(num);
             if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
@@ -1360,41 +594,30 @@
 
         function calculatePassiveIncome() {
             let totalIncome = 0;
-            for (const [unitId, count] of Object.entries(state.units)) {
-                if (GAME_UNITS[unitId]) {
-                    totalIncome += GAME_UNITS[unitId].income * count;
-                }
-            }
+            for (const [unitId, count] of Object.entries(state.units)) { if (GAME_UNITS[unitId]) totalIncome += GAME_UNITS[unitId].income * count; }
             return totalIncome;
         }
 
         function calculateClickPower() {
-            let power = 1; // Базовый клик
-            for (const [upgradeId, count] of Object.entries(state.upgrades)) {
-                if (GAME_UPGRADES[upgradeId]) {
-                    power += GAME_UPGRADES[upgradeId].effect * count;
-                }
-            }
+            let power = 1;
+            for (const [upgradeId, count] of Object.entries(state.upgrades)) { if (GAME_UPGRADES[upgradeId]) power += GAME_UPGRADES[upgradeId].effect * count; }
             return power;
         }
 
-        /* =======================================================
-           ДЕЙСТВИЯ ИГРОКА (Клики, Покупки)
-           ======================================================= */
-        
-        // Ручной клик по молотку
+        function checkFloorProgress() {
+            const targetFloor = Math.floor(state.totalBricksEarned / BRICKS_PER_FLOOR) + 1;
+            if (targetFloor > state.floor) {
+                state.floor = targetFloor;
+                triggerNewFloorEvent();
+            }
+        }
+
         function handleManualClick(event) {
             const now = Date.now();
-            // Защита от автокликеров на ПК (лимит 25 кликов в секунду)
             if (now - state.lastClickTime < 1000 / MAX_CLICKS_PER_SEC) return;
             state.lastClickTime = now;
+            if (state.energy <= 0) { showToast('Энергия закончилась!', 'error'); return; }
 
-            if (state.energy <= 0) {
-                showToast('Энергия закончилась! Подожди немного.', 'error');
-                return;
-            }
-
-            // Шанс крита 5%
             const isCrit = Math.random() < 0.05;
             let gainedBricks = calculateClickPower();
             if (isCrit) gainedBricks *= 5;
@@ -1402,176 +625,159 @@
             state.energy -= 1;
             addBricksToState(gainedBricks, isCrit);
 
-            // Визуализация
-            if (event) {
-                createFloatingText(gainedBricks, isCrit);
-            }
-            
+            if (event) createFloatingText(gainedBricks, isCrit);
             playSoundEffect(isCrit ? 1000 : 450, 0.05);
             triggerHaptic();
         }
 
-        // Общая функция добавления кирпичей (вызывается кликом и автокликером)
         function addBricksToState(amount, isCrit = false) {
             state.bricks += amount;
-            state.totalClicks += 1;
-
-            // Проверка на новый этаж
-            const newFloor = Math.floor(state.totalClicks / CLICKS_PER_FLOOR) + 1;
-            if (newFloor > state.floor) {
-                state.floor = newFloor;
-                triggerNewFloorEvent();
-            }
-
+            state.totalBricksEarned += amount;
+            checkFloorProgress();
             renderResourceBar();
             renderBuilding();
             saveGameData();
         }
 
-        // Продажа кирпичей барыге
         function sellBricks(amountType) {
-            if (state.bricks <= 0) {
-                showToast('У тебя нет кирпичей для продажи!', 'error');
-                return;
-            }
-
-            let amountToSell = 0;
-            if (amountType === 'all') {
-                amountToSell = state.bricks;
-            } else {
-                amountToSell = Math.min(state.bricks, amountType);
-            }
-
+            if (state.bricks <= 0) { showToast('Нет кирпичей для продажи!', 'error'); return; }
+            let amountToSell = amountType === 'all' ? state.bricks : Math.min(state.bricks, amountType);
             if (amountToSell <= 0) return;
 
             const earnedMoney = amountToSell * state.bargerPrice;
-            
             state.bricks -= amountToSell;
             state.money += earnedMoney;
-
-            // Барыга меняет цену (от 1 до 4)
             state.bargerPrice = Math.floor(Math.random() * 4) + 1;
 
             playSoundEffect(800, 0.1);
             showToast(`Продано ${formatNumber(amountToSell)} шт. за ${formatNumber(earnedMoney)} ₽`, 'success');
-            
-            renderAllUI();
-            saveGameData();
+            renderAllUI(); saveGameData();
         }
 
-        // Покупка юнита (Бригада)
         function buyUnit(unitId) {
-            const unitDef = GAME_UNITS[unitId];
-            if (!unitDef) return;
-
+            const unitDef = GAME_UNITS[unitId]; if (!unitDef) return;
             const currentCount = state.units[unitId] || 0;
             const cost = Math.floor(unitDef.baseCost * Math.pow(1.15, currentCount));
-
-            if (state.money < cost) {
-                showToast('Не хватает рублей!', 'error');
-                return;
-            }
-
-            state.money -= cost;
-            state.units[unitId] = currentCount + 1;
-            
-            playSoundEffect(600, 0.1);
-            showToast(`${unitDef.name} нанят на работу!`, 'success');
-            
-            renderAllUI();
-            saveGameData();
+            if (state.money < cost) { showToast('Не хватает рублей!', 'error'); return; }
+            state.money -= cost; state.units[unitId] = currentCount + 1;
+            playSoundEffect(600, 0.1); showToast(`${unitDef.name} нанят!`, 'success');
+            renderAllUI(); saveGameData();
         }
 
-        // Покупка апгрейда (Сила клика)
         function buyUpgrade(upgradeId) {
-            const upgDef = GAME_UPGRADES[upgradeId];
-            if (!upgDef) return;
-
+            const upgDef = GAME_UPGRADES[upgradeId]; if (!upgDef) return;
             const currentCount = state.upgrades[upgradeId] || 0;
             const cost = Math.floor(upgDef.baseCost * Math.pow(1.2, currentCount));
-
-            if (state.money < cost) {
-                showToast('Не хватает рублей!', 'error');
-                return;
-            }
-
-            state.money -= cost;
-            state.upgrades[upgradeId] = currentCount + 1;
-            
-            playSoundEffect(700, 0.1);
-            showToast(`${upgDef.name} улучшен!`, 'success');
-            
-            renderAllUI();
-            saveGameData();
+            if (state.money < cost) { showToast('Не хватает рублей!', 'error'); return; }
+            state.money -= cost; state.upgrades[upgradeId] = currentCount + 1;
+            playSoundEffect(700, 0.1); showToast(`${upgDef.name} улучшен!`, 'success');
+            renderAllUI(); saveGameData();
         }
 
-        // Покупка Автокликера
         function buyAutoClicker() {
             const currentLvl = state.autoClickerLvl || 0;
-            // Цена растет: 2000, 4000, 6000...
             const cost = 2000 * (currentLvl + 1);
-
-            if (state.money < cost) {
-                showToast('Не хватает рублей!', 'error');
-                return;
-            }
-
-            state.money -= cost;
-            state.autoClickerLvl = currentLvl + 1;
-            
-            playSoundEffect(900, 0.15);
-            showToast(`Автокликер улучшен до ур. ${state.autoClickerLvl}!`, 'success');
-            
-            renderAllUI();
-            saveGameData();
+            if (state.money < cost) { showToast('Не хватает рублей!', 'error'); return; }
+            state.money -= cost; state.autoClickerLvl = currentLvl + 1;
+            playSoundEffect(900, 0.15); showToast(`Автокликер улучшен!`, 'success');
+            renderAllUI(); saveGameData();
         }
 
-        /* =======================================================
-           ИГРОВЫЕ СОБЫТИЯ
-           ======================================================= */
+        // --- ПОКУПКА УЛУЧШЕНИЯ ЭНЕРГИИ ---
+        function buyEnergyUpgrade() {
+            const currentLvl = state.energyLvl || 0;
+            // Цена: 1-й ур: 800, 2-й: 2300, 3-й: 3800 и т.д.
+            const cost = 800 + (currentLvl * 1500); 
+            
+            if (state.money < cost) { showToast('Не хватает рублей!', 'error'); return; }
+            
+            state.money -= cost;
+            state.energyLvl += 1;
+            ENERGY_MAX = 1000 + (state.energyLvl * 1000);
+            
+            // Даем игроку сразу полную энергию при улучшении
+            state.energy = ENERGY_MAX; 
+            
+            playSoundEffect(1000, 0.2); 
+            spawnConfetti(20);
+            showToast(`Склад расширен! Теперь у тебя ${ENERGY_MAX} энергии.`, 'success');
+            renderAllUI(); saveGameData();
+        }
+
         function triggerNewFloorEvent() {
             playSoundEffect(1200, 0.2);
             spawnConfetti(30);
-            showModalWindow(
-                'Новый этаж!', 
-                `Поздравляем! Ты построил ${state.floor}-й этаж. Твоя башня растет вверх!`, 
-                'star'
-            );
+            showModalWindow('Новый этаж!', `Поздравляем! Ты накопил кирпичей на ${state.floor}-й этаж!`, 'star');
         }
 
-        /* =======================================================
-           ОТРИСОВКА ИНТЕРФЕЙСА (UI)
-           ======================================================= */
+        // --- ЛОГИКА БРИГАДИРА (ПРОВЕРКИ) ---
+        let inspectorTimeout = null;
+        function scheduleInspector() {
+            if (inspectorTimeout) clearTimeout(inspectorTimeout);
+            const delay = 120000 + Math.random() * 60000; 
+            inspectorTimeout = setTimeout(() => {
+                callInspector();
+                scheduleInspector();
+            }, delay);
+        }
+
+        function callInspector() {
+            if (document.getElementById('inspector-window').classList.contains('show')) return;
+            document.getElementById('inspector-window').classList.add('show');
+            const choicesDiv = document.getElementById('inspector-choices');
+            choicesDiv.innerHTML = '';
+            const totalUnits = Object.values(state.units).reduce((a, b) => a + b, 0);
+            if (totalUnits >= 3) {
+                choicesDiv.innerHTML += `<button class="ui-btn green inspect-btn" onclick="resolveInspection(5)">"Всё по плану, шеф! Бригада работает!" (Оценка: 5⭐)</button>`;
+            } else {
+                choicesDiv.innerHTML += `<button class="ui-btn green inspect-btn" onclick="resolveInspection(4)">"Стараемся, шеф! Набираем людей." (Оценка: 4⭐)</button>`;
+            }
+            choicesDiv.innerHTML += `<button class="ui-btn yellow inspect-btn" onclick="resolveInspection(3, true)">"Работаем в поте лица, но есть нюансы..." (Шанс на 5⭐)</button>`;
+            choicesDiv.innerHTML += `<button class="ui-btn inspect-btn" style="background:var(--color-bg-main); border:1px solid var(--color-text-muted);" onclick="resolveInspection(3)">"Задерживаемся, но скоро сдадим!" (Оценка: 3⭐)</button>`;
+            playSoundEffect(300, 0.2);
+            triggerHaptic();
+        }
+
+        function resolveInspection(baseStars, isRandom = false) {
+            document.getElementById('inspector-window').classList.remove('show');
+            let finalStars = baseStars;
+            if (isRandom && Math.random() > 0.5) finalStars = 5;
+            state.stars += finalStars;
+            if (finalStars === 5) { playSoundEffect(1000, 0.2); spawnConfetti(20); showToast(`Бригадир в восторге! Ты получил ${finalStars} ⭐`, 'success'); } 
+            else if (finalStars === 4) { playSoundEffect(800, 0.15); showToast(`Хорошая работа! Ты получил ${finalStars} ⭐`, 'success'); } 
+            else { playSoundEffect(500, 0.15); showToast(`Бригадир недоволен. Ты получил ${finalStars} ⭐`, 'error'); }
+            renderResourceBar(); saveGameData();
+        }
+
+        // --- ОТРИСОВКА ---
         function renderAllUI() {
             renderResourceBar();
             renderBuilding();
+            renderWorkers();
             renderUnitsList();
             renderUpgradesList();
             renderLeaderboard();
             renderSettingsUI();
         }
 
-        // 1. Панель ресурсов
         function renderResourceBar() {
             document.getElementById('val-bricks').textContent = formatNumber(state.bricks);
             document.getElementById('val-money').textContent = formatNumber(state.money) + ' ₽';
             document.getElementById('val-stars').textContent = formatNumber(state.stars);
-            
             document.getElementById('val-energy').textContent = Math.floor(state.energy);
-            const energyPercent = Math.max(0, Math.min(100, (state.energy / ENERGY_MAX) * 100));
-            document.getElementById('energy-fill').style.width = energyPercent + '%';
-            
+            document.getElementById('val-max-energy').textContent = ENERGY_MAX; // Обновляем макс. энергию
+            document.getElementById('energy-fill').style.width = Math.max(0, Math.min(100, (state.energy / ENERGY_MAX) * 100)) + '%';
             document.getElementById('val-barger-price').textContent = state.bargerPrice + ' ₽';
             document.getElementById('val-passive').textContent = formatNumber(calculatePassiveIncome());
+            const currentProgress = state.totalBricksEarned % BRICKS_PER_FLOOR;
+            document.getElementById('floor-fill').style.width = (currentProgress / BRICKS_PER_FLOOR) * 100 + '%';
+            document.getElementById('val-floor-progress').textContent = `${formatNumber(currentProgress)} / ${BRICKS_PER_FLOOR} до этажа`;
         }
 
-        // 2. Рендер здания и камеры
         function renderBuilding() {
             const container = document.getElementById('building-render');
             const camera = document.getElementById('camera');
-            const floorsToShow = Math.min(50, state.floor); // Ограничиваем для производительности
-            
-            // Перерисовываем этажи только если их количество изменилось
+            const floorsToShow = Math.min(50, state.floor);
             if (container.children.length !== floorsToShow) {
                 container.innerHTML = '';
                 for (let i = 0; i < floorsToShow; i++) {
@@ -1580,129 +786,108 @@
                     container.appendChild(floorDiv);
                 }
             }
-            
             document.getElementById('val-floor').textContent = state.floor;
-            
-            // Двигаем камеру (если этажей больше 8)
             const floorsAboveBase = Math.max(0, floorsToShow - 8);
-            const shiftAmount = floorsAboveBase * 15; // 15px - высота одного этажа
-            camera.style.transform = `translateY(${shiftAmount}px)`;
+            camera.style.transform = `translateY(${floorsAboveBase * 15}px)`;
         }
 
-        // 3. Список бригады
-        function renderUnitsList() {
-            const list = document.getElementById('list-units');
-            list.innerHTML = '';
+        function renderWorkers() {
+            const container = document.getElementById('workers-render');
+            container.innerHTML = '';
+            const maxVisually = 20; 
+            let workersToShow = [];
 
+            for (const [unitId, count] of Object.entries(state.units)) {
+                if (unitId === 'mason') {
+                    for (let i = 0; i < Math.min(count, maxVisually); i++) {
+                        workersToShow.push(`<svg class="worker-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="6" r="3" fill="#FFD60A"/><path d="M7 21v-4a5 5 0 0 1 10 0v4" stroke="#FF6B1A" stroke-width="3" stroke-linecap="round"/></svg>`);
+                    }
+                } else if (unitId === 'mixer') {
+                    for (let i = 0; i < Math.min(count, maxVisually); i++) {
+                        workersToShow.push(`<svg class="worker-icon" viewBox="0 0 24 24" fill="none"><circle cx="6" cy="18" r="2" fill="#8A94A6"/><circle cx="18" cy="18" r="2" fill="#8A94A6"/><path d="M3 14h10l6-6 3 3-4 3" stroke="#FF6B1A" stroke-width="2" fill="#232D42"/></svg>`);
+                    }
+                } else if (unitId === 'crane') {
+                    for (let i = 0; i < Math.min(count, maxVisually); i++) {
+                        workersToShow.push(`<svg class="worker-icon" viewBox="0 0 24 24" fill="none"><path d="M4 22V4h12" stroke="#FFD60A" stroke-width="2"/><path d="M4 4l8 4M16 4v6" stroke="#FFD60A" stroke-width="2"/><rect x="14" y="12" width="4" height="4" fill="#FF6B1A"/></svg>`);
+                    }
+                } else if (unitId === 'foreman') {
+                    for (let i = 0; i < Math.min(count, maxVisually); i++) {
+                        workersToShow.push(`<svg class="worker-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="6" r="3" fill="#FF6B1A"/><path d="M6 21v-3a6 6 0 0 1 12 0v3" stroke="#2ECC71" stroke-width="3" stroke-linecap="round"/></svg>`);
+                    }
+                }
+            }
+            if (workersToShow.length > 30) workersToShow = workersToShow.sort(() => 0.5 - Math.random()).slice(0, 30);
+            container.innerHTML = workersToShow.join('');
+        }
+
+        function renderUnitsList() {
+            const list = document.getElementById('list-units'); list.innerHTML = '';
             for (const [unitId, unitDef] of Object.entries(GAME_UNITS)) {
                 const count = state.units[unitId] || 0;
                 const cost = Math.floor(unitDef.baseCost * Math.pow(1.15, count));
                 const canAfford = state.money >= cost;
-
-                const cardHTML = `
+                list.innerHTML += `
                     <div class="ui-card">
-                        <div class="ui-card-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="3" stroke="currentColor" stroke-width="2"/><path d="M6 21v-4a6 6 0 0 1 12 0v4" stroke="currentColor" stroke-width="2"/></svg>
-                        </div>
-                        <div class="ui-card-info">
-                            <div class="ui-card-title">
-                                ${unitDef.name} 
-                                ${count > 0 ? `<span style="color:var(--color-primary)">x${count}</span>` : ''}
-                            </div>
-                            <div class="ui-card-desc">${unitDef.desc}</div>
-                        </div>
-                        <button class="ui-btn" ${!canAfford ? 'disabled' : ''} onclick="buyUnit('${unitId}')">
-                            ${formatNumber(cost)} ₽
-                        </button>
-                    </div>
-                `;
-                list.innerHTML += cardHTML;
+                        <div class="ui-card-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="3" stroke="currentColor" stroke-width="2"/><path d="M6 21v-4a6 6 0 0 1 12 0v4" stroke="currentColor" stroke-width="2"/></svg></div>
+                        <div class="ui-card-info"><div class="ui-card-title">${unitDef.name} ${count > 0 ? `<span style="color:var(--color-primary)">x${count}</span>` : ''}</div><div class="ui-card-desc">${unitDef.desc}</div></div>
+                        <button class="ui-btn" ${!canAfford ? 'disabled' : ''} onclick="buyUnit('${unitId}')">${formatNumber(cost)} ₽</button>
+                    </div>`;
             }
         }
 
-        // 4. Список апгрейдов
         function renderUpgradesList() {
-            const list = document.getElementById('list-upgrades');
-            list.innerHTML = '';
-
+            const list = document.getElementById('list-upgrades'); list.innerHTML = '';
             for (const [upgId, upgDef] of Object.entries(GAME_UPGRADES)) {
                 const count = state.upgrades[upgId] || 0;
                 const cost = Math.floor(upgDef.baseCost * Math.pow(1.2, count));
                 const canAfford = state.money >= cost;
-
-                const cardHTML = `
+                list.innerHTML += `
                     <div class="ui-card">
-                        <div class="ui-card-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 20V5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6 11l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                        </div>
-                        <div class="ui-card-info">
-                            <div class="ui-card-title">
-                                ${upgDef.name}
-                                ${count > 0 ? `<span style="color:var(--color-accent-green)">Ур.${count}</span>` : ''}
-                            </div>
-                            <div class="ui-card-desc">${upgDef.desc}</div>
-                        </div>
-                        <button class="ui-btn green" ${!canAfford ? 'disabled' : ''} onclick="buyUpgrade('${upgId}')">
-                            ${formatNumber(cost)} ₽
-                        </button>
-                    </div>
-                `;
-                list.innerHTML += cardHTML;
+                        <div class="ui-card-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 20V5" stroke="currentColor" stroke-width="2"/><path d="M6 11l6-6 6 6" stroke="currentColor" stroke-width="2"/></svg></div>
+                        <div class="ui-card-info"><div class="ui-card-title">${upgDef.name} ${count > 0 ? `<span style="color:var(--color-accent-green)">Ур.${count}</span>` : ''}</div><div class="ui-card-desc">${upgDef.desc}</div></div>
+                        <button class="ui-btn green" ${!canAfford ? 'disabled' : ''} onclick="buyUpgrade('${upgId}')">${formatNumber(cost)} ₽</button>
+                    </div>`;
             }
-
-            // Обновление кнопки автокликера
+            
+            // Обновление кнопки Автокликера
             const autoLvl = state.autoClickerLvl || 0;
             const autoCost = 2000 * (autoLvl + 1);
-            const canBuyAuto = state.money >= autoCost;
-
             document.getElementById('val-auto-lvl').textContent = autoLvl > 0 ? `Ур.${autoLvl}` : '';
-            
             const autoBtn = document.getElementById('btn-buy-auto');
             autoBtn.textContent = formatNumber(autoCost) + ' ₽';
-            autoBtn.disabled = !canBuyAuto;
+            autoBtn.disabled = state.money < autoCost;
+
+            // Обновление кнопки Энергии
+            const energyLvl = state.energyLvl || 0;
+            const energyCost = 800 + (energyLvl * 1500);
+            document.getElementById('val-energy-lvl').textContent = energyLvl > 0 ? `Ур.${energyLvl}` : '';
+            document.getElementById('val-next-energy').textContent = (1000 + (energyLvl * 1000) + 1000);
+            const energyBtn = document.getElementById('btn-buy-energy');
+            energyBtn.textContent = formatNumber(energyCost) + ' ₽';
+            energyBtn.disabled = state.money < energyCost;
         }
 
-        // 5. Лидерборд (заглушка с фейковыми игроками)
         function renderLeaderboard() {
             const list = document.getElementById('list-leaderboard');
-            
-            // Имитация базы данных
             const players = [
                 { name: 'Бетонный Магнат', score: 152040 },
                 { name: 'Прораб 2000', score: 98500 },
-                { name: state.firstName, score: state.totalClicks, isMe: true }
-            ];
-            
-            // Сортируем по очкам
-            players.sort((a, b) => b.score - a.score);
-            
+                { name: state.firstName, score: state.totalBricksEarned, isMe: true }
+            ].sort((a, b) => b.score - a.score);
             list.innerHTML = '';
             players.forEach((player, index) => {
-                let rankColor = 'var(--color-bg-secondary)';
-                let rankTextColor = 'var(--color-text-main)';
-                
-                if (index === 0) { rankColor = 'gold'; rankTextColor = '#000'; }
-                if (index === 1) { rankColor = 'silver'; rankTextColor = '#000'; }
-                
+                let rankColor = index === 0 ? 'gold' : index === 1 ? 'silver' : 'var(--color-bg-secondary)';
+                let rankTextColor = index < 2 ? '#000' : '#fff';
                 const borderStyle = player.isMe ? 'border: 1px solid var(--color-primary); background: rgba(255,107,26,0.05);' : '';
-                
                 list.innerHTML += `
                     <div class="ui-card" style="${borderStyle}">
-                        <div style="width:32px; height:32px; background:${rankColor}; color:${rankTextColor}; border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:16px;">
-                            ${index + 1}
-                        </div>
-                        <div class="ui-card-info">
-                            <div class="ui-card-title">${player.name} ${player.isMe ? '(Ты)' : ''}</div>
-                        </div>
-                        <div style="font-weight:800; color:var(--color-primary);">
-                            ${formatNumber(player.score)}
-                        </div>
-                    </div>
-                `;
+                        <div style="width:32px; height:32px; background:${rankColor}; color:${rankTextColor}; border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:16px;">${index + 1}</div>
+                        <div class="ui-card-info"><div class="ui-card-title">${player.name} ${player.isMe ? '(Ты)' : ''}</div></div>
+                        <div style="font-weight:800; color:var(--color-primary);">${formatNumber(player.score)}</div>
+                    </div>`;
             });
         }
 
-        // 6. Настройки
         function renderSettingsUI() {
             document.getElementById('toggle-sound').checked = state.settings.sound;
             document.getElementById('toggle-vibe').checked = state.settings.vibration;
@@ -1710,174 +895,92 @@
             document.getElementById('val-vol').textContent = state.settings.volume * 100;
         }
 
-        /* =======================================================
-           ЭФФЕКТЫ И УВЕДОМЛЕНИЯ
-           ======================================================= */
         function createFloatingText(amount, isCrit) {
-            const btn = document.getElementById('btn-build');
-            const rect = btn.getBoundingClientRect();
-            
-            const el = document.createElement('div');
-            el.className = 'floating-text';
+            const btn = document.getElementById('btn-build'); const rect = btn.getBoundingClientRect();
+            const el = document.createElement('div'); el.className = 'floating-text';
             el.textContent = `+${formatNumber(amount)}${isCrit ? ' КРИТ!' : ''}`;
-            
-            if (isCrit) {
-                el.style.color = 'var(--color-accent-red)';
-                el.style.fontSize = '32px';
-            }
-            
-            el.style.left = (rect.left + rect.width / 2 - 20) + 'px';
-            el.style.top = (rect.top + rect.height / 2 - 20) + 'px';
-            
-            document.body.appendChild(el);
-            
-            setTimeout(() => {
-                el.remove();
-            }, 900);
+            if (isCrit) { el.style.color = 'var(--color-accent-red)'; el.style.fontSize = '32px'; }
+            el.style.left = (rect.left + rect.width / 2 - 20) + 'px'; el.style.top = (rect.top + rect.height / 2 - 20) + 'px';
+            document.body.appendChild(el); setTimeout(() => el.remove(), 900);
         }
 
         function showToast(message, type = '') {
             const toast = document.getElementById('toast-container');
-            toast.textContent = message;
-            toast.className = 'show ' + type;
-            
-            clearTimeout(toast._timer);
-            toast._timer = setTimeout(() => {
-                toast.className = '';
-            }, 2500);
+            toast.textContent = message; toast.className = 'show ' + type;
+            clearTimeout(toast._timer); toast._timer = setTimeout(() => toast.className = '', 2500);
         }
 
         function showModalWindow(title, text, iconType = 'star') {
             document.getElementById('modal-title').textContent = title;
             document.getElementById('modal-desc').textContent = text;
-            
-            const iconWrapper = document.getElementById('modal-icon');
-            if (iconType === 'star') {
-                iconWrapper.innerHTML = `<svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.6 5.6 6 .8-4.4 4.2 1.1 6L12 15.8 6.7 18.6l1.1-6L3.4 8.4l6-.8L12 2Z" fill="currentColor"/></svg>`;
-                iconWrapper.style.backgroundColor = 'rgba(255, 107, 26, 0.15)';
-                iconWrapper.style.color = 'var(--color-primary)';
-            }
-            
             document.getElementById('modal-window').classList.add('show');
         }
 
-        function closeModalWindow() {
-            document.getElementById('modal-window').classList.remove('show');
-        }
+        function closeModalWindow() { document.getElementById('modal-window').classList.remove('show'); }
 
         function spawnConfetti(count) {
             const colors = ['#FF6B1A', '#FFD60A', '#2ECC71', '#2AABEE', '#9B59B6'];
             for (let i = 0; i < count; i++) {
-                const conf = document.createElement('div');
-                conf.className = 'confetti-particle';
-                
-                conf.style.left = Math.random() * 100 + 'vw';
-                conf.style.top = '-20px';
+                const conf = document.createElement('div'); conf.className = 'confetti-particle';
+                conf.style.left = Math.random() * 100 + 'vw'; conf.style.top = '-20px';
                 conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 conf.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
                 conf.style.animationDelay = (Math.random() * 0.2) + 's';
-                
-                document.body.appendChild(conf);
-                
-                setTimeout(() => conf.remove(), 3000);
+                document.body.appendChild(conf); setTimeout(() => conf.remove(), 3000);
             }
         }
 
-        /* =======================================================
-           НАВИГАЦИЯ
-           ======================================================= */
         function switchTab(tabName) {
-            // Скрываем все экраны
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            
-            // Показываем нужный
             const targetScreen = document.getElementById(`screen-${tabName}`);
             if (targetScreen) targetScreen.classList.add('active');
-            
-            // Переключаем активный класс на кнопках
             document.querySelectorAll('.nav-item').forEach(btn => {
-                if (btn.dataset.target === tabName) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
+                if (btn.dataset.target === tabName) btn.classList.add('active');
+                else btn.classList.remove('active');
             });
-            
             triggerHaptic();
         }
 
-        /* =======================================================
-           ГЛАВНЫЙ ИГРОВОЙ ЦИКЛ (Таймеры)
-           ======================================================= */
         function startGameLoops() {
-            
-            // 1. Восстановление энергии (каждую секунду)
             setInterval(() => {
-                if (state.energy < ENERGY_MAX) {
-                    state.energy = Math.min(ENERGY_MAX, state.energy + ENERGY_REGEN_RATE);
-                    renderResourceBar();
-                }
+                if (state.energy < ENERGY_MAX) { state.energy = Math.min(ENERGY_MAX, state.energy + ENERGY_REGEN_RATE); renderResourceBar(); }
                 state.lastEnergyUpdate = Date.now();
             }, 1000);
 
-            // 2. Пассивный доход от бригады (каждую секунду)
             setInterval(() => {
                 const income = calculatePassiveIncome();
                 if (income > 0) {
                     state.bricks += income;
-                    renderResourceBar();
+                    state.totalBricksEarned += income;
+                    checkFloorProgress();
+                    renderResourceBar(); renderBuilding();
                 }
             }, 1000);
 
-            // 3. Работа Автокликера (каждую секунду)
             setInterval(() => {
                 const autoLvl = state.autoClickerLvl || 0;
                 if (autoLvl > 0 && state.energy > 0) {
-                    // Тратим энергию (1 единица за каждый уровень автокликера)
                     const energyCost = autoLvl;
-                    
                     if (state.energy >= energyCost) {
                         state.energy -= energyCost;
-                        
-                        // Начисляем кирпичи (сила клика * уровень автокликера)
                         const power = calculateClickPower() * autoLvl;
                         addBricksToState(power);
-                        
-                        // Визуальный отклик от автокликера (легкая вибрация)
                         if (Math.random() < 0.2) triggerHaptic();
                     }
                 }
             }, 1000);
 
-            // Автосохранение каждые 5 секунд
             setInterval(saveGameData, 5000);
         }
 
-        /* =======================================================
-           ЗАПУСК
-           ======================================================= */
         window.addEventListener('DOMContentLoaded', () => {
             initApp();
-            
-            // Привязка событий
             document.getElementById('btn-build').addEventListener('click', handleManualClick);
-            
-            document.querySelectorAll('.nav-item').forEach(btn => {
-                btn.addEventListener('click', () => switchTab(btn.dataset.target));
-            });
-            
-            // Запуск таймеров игры
+            document.querySelectorAll('.nav-item').forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.target)));
             startGameLoops();
-            
-            // Сейв при закрытии
             window.addEventListener('beforeunload', saveGameData);
-            document.addEventListener('visibilitychange', () => {
-                if (document.hidden) saveGameData();
-            });
-            
-            console.log("MY BRIGADA успешно запущена. Разработчик: @iticov");
+            document.addEventListener('visibilitychange', () => { if (document.hidden) saveGameData(); });
         });
-
     </script>
 </body>
 </html>
